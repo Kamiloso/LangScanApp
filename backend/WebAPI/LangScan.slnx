@@ -1,0 +1,6 @@
+<Solution>
+  <Project Path="LangScan.Application/LangScan.Application.csproj" />
+  <Project Path="LangScan.Domain/LangScan.Domain.csproj" />
+  <Project Path="LangScan.Infrastructure/LangScan.Infrastructure.csproj" />
+  <Project Path="LangScan/LangScan.csproj" />
+</Solution>
