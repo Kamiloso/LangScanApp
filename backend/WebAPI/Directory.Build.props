@@ -1,4 +1,10 @@
 <Project>
+  <ItemGroup Condition="'$(MSBuildProjectName)' != 'LangScan'">
+    <AssemblyAttribute Include="System.Runtime.CompilerServices.InternalsVisibleTo">
+      <_Parameter1>LangScan</_Parameter1>
+    </AssemblyAttribute>
+  </ItemGroup>
+
   <ItemGroup>
     <PackageReference Include="AutoInterface" Version="*" OutputItemType="Analyzer" ReferenceOutputAssembly="false" />
   </ItemGroup>

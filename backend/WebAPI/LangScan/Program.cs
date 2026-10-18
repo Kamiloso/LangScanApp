@@ -1,8 +1,8 @@
-using LangScan.Application;
-using LangScan.Domain;
-using LangScan.Helpers;
-using LangScan.Infrastructure;
+using LangScan.Application.Interfaces;
+using LangScan.Application.Services.Users;
 using LangScan.Configuration;
+using LangScan.Infrastructure.Persistence;
+using LangScan.Infrastructure.Socket.Mappers;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.Extensions.DependencyInjection;
 using System.Linq;
@@ -15,10 +15,16 @@ var srv = builder.Services
 
 srv.AddControllers();
 
-_ = new DependencyInjector(srv)
-    .AddInfrastructure()
-    .AddApplication()
-    .AddDomain();
+// Infrastructure
+{
+    srv.AddScoped<IAppDbContext, AppDbContext>();
+    srv.AddSingleton<AccountMapper>();
+}
+
+// Application
+{
+    srv.AddScoped<IUserService, UserService>();
+}
 
 builder.SetupPostgres();
 
