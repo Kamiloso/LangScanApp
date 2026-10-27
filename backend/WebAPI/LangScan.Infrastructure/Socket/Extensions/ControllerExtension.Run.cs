@@ -7,14 +7,16 @@ namespace LangScan.Infrastructure.Socket.Extensions;
 
 public abstract partial class ControllerExtension : ControllerBase
 {
-    public async Task<ActionResult<T>> Run<T>(
+    protected async Task<ActionResult<T>> Run<T>(
         Func<Task<T>> executor,
-        Func<T, ActionResult<T>> result)
+        Func<T, ActionResult<T>>? success = null)
     {
+        success ??= x => Ok(x);
+
         try
         {
             T data = await executor();
-            return result(data);
+            return success(data);
         }
         catch (AbortException ex)
         {
@@ -25,5 +27,23 @@ public abstract partial class ControllerExtension : ControllerBase
                 message = ex.Message,
             });
         }
+    }
+
+    protected async Task<ActionResult> Run(
+        Func<Task> executor,
+        Func<ActionResult>? success = null)
+    {
+        success ??= () => Ok();
+
+        ActionResult<int> response = await Run(
+            executor: async () =>
+            {
+                await executor();
+                return 0;
+            },
+            success: _ => success()
+        );
+
+        return response.Result!;
     }
 }

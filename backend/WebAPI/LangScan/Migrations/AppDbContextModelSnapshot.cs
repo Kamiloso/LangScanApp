@@ -21,7 +21,7 @@ namespace LangScan.Migrations
 
             NpgsqlModelBuilderExtensions.UseIdentityByDefaultColumns(modelBuilder);
 
-            modelBuilder.Entity("LangScan.Domain.Model.User", b =>
+            modelBuilder.Entity("LangScan.Domain.Model.Entities.Language", b =>
                 {
                     b.Property<long>("Id")
                         .ValueGeneratedOnAdd()
@@ -29,13 +29,178 @@ namespace LangScan.Migrations
 
                     NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<long>("Id"));
 
-                    b.Property<string>("Email")
+                    b.Property<string>("Code")
+                        .IsRequired()
+                        .HasMaxLength(255)
+                        .HasColumnType("character varying(255)");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("Code")
+                        .IsUnique();
+
+                    b.ToTable("languages", (string)null);
+
+                    b.HasData(
+                        new
+                        {
+                            Id = 1L,
+                            Code = "pl"
+                        },
+                        new
+                        {
+                            Id = 2L,
+                            Code = "en"
+                        },
+                        new
+                        {
+                            Id = 3L,
+                            Code = "de"
+                        },
+                        new
+                        {
+                            Id = 4L,
+                            Code = "es"
+                        });
+                });
+
+            modelBuilder.Entity("LangScan.Domain.Model.Entities.Phrase", b =>
+                {
+                    b.Property<long>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("bigint");
+
+                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<long>("Id"));
+
+                    b.Property<string>("DefinitionKnown")
+                        .IsRequired()
+                        .HasMaxLength(4096)
+                        .HasColumnType("character varying(4096)");
+
+                    b.Property<string>("DefinitionLearning")
+                        .IsRequired()
+                        .HasMaxLength(4096)
+                        .HasColumnType("character varying(4096)");
+
+                    b.Property<long>("IdPhraseGroup")
+                        .HasColumnType("bigint");
+
+                    b.Property<string>("WordKnown")
+                        .IsRequired()
+                        .HasMaxLength(4096)
+                        .HasColumnType("character varying(4096)");
+
+                    b.Property<string>("WordLearning")
+                        .IsRequired()
+                        .HasMaxLength(4096)
+                        .HasColumnType("character varying(4096)");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("IdPhraseGroup");
+
+                    b.ToTable("phrases", (string)null);
+                });
+
+            modelBuilder.Entity("LangScan.Domain.Model.Entities.PhraseGroup", b =>
+                {
+                    b.Property<long>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("bigint");
+
+                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<long>("Id"));
+
+                    b.Property<string>("Description")
+                        .IsRequired()
+                        .HasMaxLength(65535)
+                        .HasColumnType("character varying(65535)");
+
+                    b.Property<long>("IdLanguageKnown")
+                        .HasColumnType("bigint");
+
+                    b.Property<long>("IdLanguageLearning")
+                        .HasColumnType("bigint");
+
+                    b.Property<long>("IdUser")
+                        .HasColumnType("bigint");
+
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasMaxLength(255)
+                        .HasColumnType("character varying(255)");
+
+                    b.Property<string>("ProficiencyLevel")
                         .IsRequired()
                         .HasColumnType("text");
 
                     b.HasKey("Id");
 
-                    b.ToTable("Users");
+                    b.HasIndex("IdLanguageKnown");
+
+                    b.HasIndex("IdLanguageLearning");
+
+                    b.HasIndex("IdUser");
+
+                    b.ToTable("phrase_groups", (string)null);
+                });
+
+            modelBuilder.Entity("LangScan.Domain.Model.Entities.User", b =>
+                {
+                    b.Property<long>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("bigint");
+
+                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<long>("Id"));
+
+                    b.Property<string>("AnimalFood")
+                        .IsRequired()
+                        .HasMaxLength(65535)
+                        .HasColumnType("character varying(65535)");
+
+                    b.Property<int>("AnimalHealth")
+                        .HasColumnType("integer");
+
+                    b.Property<string>("Email")
+                        .IsRequired()
+                        .HasMaxLength(255)
+                        .HasColumnType("character varying(255)");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("Email")
+                        .IsUnique();
+
+                    b.ToTable("users", (string)null);
+                });
+
+            modelBuilder.Entity("LangScan.Domain.Model.Entities.Phrase", b =>
+                {
+                    b.HasOne("LangScan.Domain.Model.Entities.PhraseGroup", null)
+                        .WithMany()
+                        .HasForeignKey("IdPhraseGroup")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+                });
+
+            modelBuilder.Entity("LangScan.Domain.Model.Entities.PhraseGroup", b =>
+                {
+                    b.HasOne("LangScan.Domain.Model.Entities.Language", null)
+                        .WithMany()
+                        .HasForeignKey("IdLanguageKnown")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("LangScan.Domain.Model.Entities.Language", null)
+                        .WithMany()
+                        .HasForeignKey("IdLanguageLearning")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("LangScan.Domain.Model.Entities.User", null)
+                        .WithMany()
+                        .HasForeignKey("IdUser")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
                 });
 #pragma warning restore 612, 618
         }

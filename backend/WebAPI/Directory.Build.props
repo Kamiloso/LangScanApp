@@ -8,4 +8,8 @@
   <ItemGroup>
     <PackageReference Include="AutoInterface" Version="*" OutputItemType="Analyzer" ReferenceOutputAssembly="false" />
   </ItemGroup>
+  
+  <PropertyGroup>
+    <EnforceCodeStyleInBuild>true</EnforceCodeStyleInBuild>
+  </PropertyGroup>
 </Project>

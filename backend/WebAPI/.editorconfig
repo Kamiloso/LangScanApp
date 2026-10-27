@@ -1,0 +1,5 @@
+root = true
+
+[*.cs]
+# Namespace does not match folder structure
+dotnet_diagnostic.IDE0130.severity = error

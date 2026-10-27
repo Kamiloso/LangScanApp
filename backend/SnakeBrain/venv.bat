@@ -10,6 +10,7 @@ echo  1. Setup venv
 echo  2. Open cmd in venv
 echo  3. Open project in venv
 echo  4. Freeze dependencies
+echo  5. Delete venv
 echo  0. Exit
 echo.
 echo  Select an option:
@@ -19,6 +20,7 @@ if "%choice%"=="1" goto setup_env
 if "%choice%"=="2" goto open_terminal
 if "%choice%"=="3" goto open_code
 if "%choice%"=="4" goto freeze_env
+if "%choice%"=="5" goto delete_env
 if "%choice%"=="0" goto end
 
 echo.
@@ -36,7 +38,7 @@ call ".venv\Scripts\activate.bat"
 echo.
 echo Venv has been installed.
 if not exist requirements.txt (
-	goto finish
+    goto finish
 )
 pip install -r requirements.txt
 echo.
@@ -72,6 +74,17 @@ call ".venv\Scripts\activate.bat"
 pip freeze > requirements.txt
 echo.
 echo Dependencies have been freezed.
+goto finish
+
+:delete_env
+if not exist .venv\ (
+    echo.
+    echo Venv not found.
+    goto finish
+)
+rmdir /s /q .venv
+echo.
+echo Venv has been deleted.
 goto finish
 
 :finish

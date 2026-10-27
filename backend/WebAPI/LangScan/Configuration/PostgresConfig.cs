@@ -8,7 +8,7 @@ using System.Threading.Tasks;
 
 namespace LangScan.Configuration;
 
-file class DatabaseOptions
+file record PostgresOptions
 {
     public int MaxRetryCount { get; init; }
     public int MaxRetryDelayMs { get; init; }
@@ -20,8 +20,8 @@ public static class PostgresConfig
     {
         string? connectionString = builder.Configuration.GetConnectionString("Default");
 
-        var dbOptions = builder.Configuration.GetSection("Database").Get<DatabaseOptions>()
-            ?? throw new InvalidOperationException("Database configuration section is missing or invalid.");
+        var dbOptions = builder.Configuration.GetSection("Postgres").Get<PostgresOptions>()
+            ?? throw new InvalidOperationException("Postgres configuration section is missing or invalid");
 
         builder.Services.AddDbContext<AppDbContext>(options =>
             options.UseNpgsql(connectionString, b =>
@@ -39,9 +39,9 @@ public static class PostgresConfig
     public static async Task<WebApplication> ApplyPostgresMigrationsAsync(this WebApplication app)
     {
         using var scope = app.Services.CreateScope();
-        var dbContext = scope.ServiceProvider.GetRequiredService<AppDbContext>();
+        var db = scope.ServiceProvider.GetRequiredService<AppDbContext>();
 
-        await dbContext.Database.MigrateAsync();
+        await db.Database.MigrateAsync();
 
         return app;
     }

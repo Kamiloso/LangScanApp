@@ -1,8 +1,8 @@
 ﻿using LangScan.Application.Services.Users;
-using LangScan.Domain.Model;
+using LangScan.Domain.Model.Entities;
+using LangScan.Domain.Model.Requests;
 using LangScan.Infrastructure.Socket.Controllers.Accounts.Dto;
 using LangScan.Infrastructure.Socket.Extensions;
-using LangScan.Infrastructure.Socket.Mappers;
 using Microsoft.AspNetCore.Mvc;
 using System.Threading.Tasks;
 
@@ -11,20 +11,26 @@ namespace LangScan.Infrastructure.Socket.Controllers.Accounts;
 [ApiController]
 [Route("api/account")]
 public class AccountController(
-    AccountMapper accountMapper,
-    IUserService userService) : ControllerExtension
+    IUserService service,
+    AccountMapper mapper) : ControllerExtension
 {
-    [HttpPut]
-    public async Task<ActionResult<AccountDto>> PutAccount(
-        [FromBody] AccountPutDto accountPutDto)
-    {
-        return await Run(
-            executor: async () =>
-            {
-                User user = await userService.InsertOrUpdate(accountPutDto.Email);
-                return accountMapper.ToDto(user);
-            },
-            result: x => Ok(x)
-        );
-    }
+    [HttpGet]
+    public async Task<ActionResult<AccountDto>> GetAccount() => await Run(
+        executor: async () =>
+        {
+            User result = await service.Get();
+            return mapper.ToDto(result);
+        }
+    );
+
+    [HttpPatch]
+    public async Task<ActionResult<AccountDto>> PatchAnimalData(
+        [FromBody] AccountAnimalPatchDto bodyDto) => await Run(
+        executor: async () =>
+        {
+            UserAnimalPatch body = mapper.ToDomain(bodyDto);
+            User result = await service.PatchAnimal(body);
+            return mapper.ToDto(result);
+        }
+    );
 }

@@ -1,26 +1,26 @@
 ﻿using AutoInterfaceAttributes;
-using LangScan.Application.Interfaces;
-using LangScan.Domain.Model;
-using System.Linq;
 using System.Threading.Tasks;
-using Microsoft.EntityFrameworkCore;
+using LangScan.Domain.Model.Entities;
+using LangScan.Application.SubServices;
+using LangScan.Application.Interfaces;
+using LangScan.Domain.Model.Requests;
 
 namespace LangScan.Application.Services.Users;
 
 [AutoInterface]
-public class UserService(IAppDbContext db) : IUserService
+public class UserService(
+    IReqAuth reqAuth,
+    IAppDbContext db) : IUserService
 {
-    public async Task<User> InsertOrUpdate(string email)
+    public async Task<User> Get() => await reqAuth.Login();
+
+    public async Task<User> PatchAnimal(UserAnimalPatch body)
     {
-        var user = await db.Users.FirstOrDefaultAsync(u => u.Email == email);
+        var user = await reqAuth.Login();
 
-        if (user is null)
-        {
-            user = User.CreateInitial(email);
+        user.ApplyAnimalPatch(body);
 
-            await db.Users.AddAsync(user);
-            await db.SaveChangesAsync();
-        }
+        await db.SaveChangesAsync();
 
         return user;
     }

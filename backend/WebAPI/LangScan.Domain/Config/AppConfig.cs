@@ -1,5 +1,7 @@
-﻿namespace LangScan.Domain.Config;
+﻿using System;
+
+namespace LangScan.Domain.Config;
 
 public record AppConfig(
-    string DbConnectionString
+    TimeSpan RepetitionCycle
 );
