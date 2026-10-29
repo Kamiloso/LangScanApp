@@ -1,3 +1,4 @@
+using LangScan;
 using LangScan.Application.Interfaces;
 using LangScan.Application.Services.Languages;
 using LangScan.Application.Services.Phrases;
@@ -7,11 +8,11 @@ using LangScan.Configuration;
 using LangScan.Domain.Systems;
 using LangScan.Infrastructure.Persistence;
 using LangScan.Infrastructure.Socket.Controllers.Accounts;
-using LangScan.Infrastructure.Socket.Controllers.Phrases.Mappers;
+using LangScan.Infrastructure.Socket.Controllers.Languages;
+using LangScan.Infrastructure.Socket.Controllers.Phrases;
 using LangScan.Infrastructure.Technology;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.Extensions.DependencyInjection;
-using System.Linq;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -22,9 +23,9 @@ builder.SetupSnakeBrainClient();
 var srv = builder.Services;
 
 srv.AddEndpointsApiExplorer();
-srv.AddSwaggerGen();
-srv.AddControllers();
+srv.AddSwaggerGenWithOptions();
 srv.AddHttpClient();
+srv.AddControllers();
 
 // Infrastructure
 {
@@ -63,8 +64,4 @@ var app = builder.Build();
 app.SetupSwagger();
 app.MapControllers();
 
-if (!args.Contains("--test-run"))
-{
-    await app.ApplyPostgresMigrationsAsync();
-    app.Run();
-}
+await app.Start(args);

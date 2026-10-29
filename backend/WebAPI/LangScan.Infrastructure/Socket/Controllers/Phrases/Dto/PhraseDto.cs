@@ -1,4 +1,5 @@
 ﻿using System.ComponentModel.DataAnnotations;
+using LangScan.Domain.Config;
 
 namespace LangScan.Infrastructure.Socket.Controllers.Phrases.Dto;
 
@@ -6,15 +7,14 @@ public record PhraseDto(
     long Id,
     long IdPhraseGroup,
 
-    [Required]
+    [MaxLength(Const.LEN_4096)]
     string WordKnown,
 
-    [Required]
+    [MaxLength(Const.LEN_4096)]
     string WordLearning,
 
-    [Required]
+    [MaxLength(Const.LEN_4096)]
     string DefinitionKnown,
 
-    [Required]
-    string DefinitionLearning
-);
+    [MaxLength(Const.LEN_4096)]
+    string DefinitionLearning);

@@ -143,7 +143,8 @@ namespace LangScan.Migrations
 
                     b.Property<string>("ProficiencyLevel")
                         .IsRequired()
-                        .HasColumnType("text");
+                        .HasMaxLength(255)
+                        .HasColumnType("character varying(255)");
 
                     b.Property<uint>("Version")
                         .IsConcurrencyToken()

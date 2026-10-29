@@ -1,6 +1,0 @@
-@LangScan_HostAddress = http://localhost:5110
-
-GET {{LangScan_HostAddress}}/weatherforecast/
-Accept: application/json
-
-###

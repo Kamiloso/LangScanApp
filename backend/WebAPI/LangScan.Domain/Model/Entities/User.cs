@@ -11,12 +11,14 @@ public record User : ICrudEntity
     public required string Email { get; init; }
 
     // Mutable
-    public int AnimalHealth { get; set; } = 100; // 0 - dead, 100 - healthy
-    public string AnimalFood { get; set; } = ""; // example: AABA - 3 apples, 1 banana
+    public required int AnimalHealth { get; set; } // 0 - 100
+    public required string AnimalFood { get; set; } // example: AABA - 3 apples, 1 banana
 
     public static User Create(string email) => new()
     {
         Email = email,
+        AnimalHealth = 100,
+        AnimalFood = "",
     };
 
     public void ApplyAnimalPatch(UserAnimalPatch patch)

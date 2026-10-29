@@ -1,16 +1,17 @@
 ﻿using System.ComponentModel.DataAnnotations;
+using LangScan.Domain.Config;
 
 namespace LangScan.Infrastructure.Socket.Controllers.Phrases.Dto;
 
 public record PhrasePatchDto(
-    [Required]
+    [MaxLength(Const.LEN_4096)]
     string WordKnown,
 
-    [Required]
+    [MaxLength(Const.LEN_4096)]
     string WordLearning,
 
-    [Required]
+    [MaxLength(Const.LEN_4096)]
     string DefinitionKnown,
 
-    [Required]
+    [MaxLength(Const.LEN_4096)]
     string DefinitionLearning);

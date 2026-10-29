@@ -1,13 +1,15 @@
-﻿using LangScan.Application.Interfaces;
-using LangScan.Application.Services.Phrases;
+﻿using LangScan.Application.Services.Phrases;
+using LangScan.Domain.Exceptions.Reasons;
+using LangScan.Domain.Model.Composite;
 using LangScan.Domain.Model.Entities;
-using LangScan.Domain.Model.Pure;
 using LangScan.Domain.Model.Requests;
+using LangScan.Infrastructure.Socket.Attributes;
 using LangScan.Infrastructure.Socket.Controllers.Phrases.Dto;
-using LangScan.Infrastructure.Socket.Controllers.Phrases.Mappers;
 using LangScan.Infrastructure.Socket.Extensions;
 using LangScan.Infrastructure.Technology;
 using Microsoft.AspNetCore.Mvc;
+using Swashbuckle.AspNetCore.Annotations;
+using System.Net;
 using System.Threading.Tasks;
 
 namespace LangScan.Infrastructure.Socket.Controllers.Phrases;
@@ -20,8 +22,11 @@ public class PhraseHierarchyController(
     IPhraseHierarchyGenerateUseCase phraseHierarchyGenerate,
     PhraseMapper mapper) : ControllerExtension(retry)
 {
-    [HttpPatch]
-    [Route("phrase-groups/{id}")]
+    [HttpPatch("phrase-groups/{id}")]
+    [SwaggerOperation(Summary = "Update phrase group details")]
+    [Returns<PhraseGroupDto>(HttpStatusCode.OK)]
+    [Throws(HttpStatusCode.Unauthorized, "Missing or invalid authentication token.")]
+    [Throws(HttpStatusCode.NotFound, "Phrase group with the specified ID does not exist or does not belong to the user.")]
     public async Task<ActionResult<PhraseGroupDto>> PatchPhraseGroup(
         [FromRoute] long id,
         [FromBody] PhraseGroupPatchDto bodyDto) => await Run(
@@ -33,8 +38,11 @@ public class PhraseHierarchyController(
         }
     );
 
-    [HttpPatch]
-    [Route("phrases/{id}")]
+    [HttpPatch("phrases/{id}")]
+    [SwaggerOperation(Summary = "Update phrase details")]
+    [Returns<PhraseDto>(HttpStatusCode.OK)]
+    [Throws(HttpStatusCode.Unauthorized, "Missing or invalid authentication token.")]
+    [Throws(HttpStatusCode.NotFound, "Phrase with the specified ID does not exist or its parent group does not belong to the user.")]
     public async Task<ActionResult<PhraseDto>> PatchPhrase(
         [FromRoute] long id,
         [FromBody] PhrasePatchDto bodyDto) => await Run(
@@ -46,8 +54,11 @@ public class PhraseHierarchyController(
         }
     );
 
-    [HttpPost]
-    [Route("generate")]
+    [HttpPost("generate")]
+    [SwaggerOperation(Summary = "Generate new phrase hierarchy")]
+    [Returns<PhraseHierarchyDto>(HttpStatusCode.OK)]
+    [Throws(HttpStatusCode.Unauthorized, "Missing or invalid authentication token.")]
+    [Throws(HttpStatusCode.NotFound, "Provided known or learning language ID does not exist.")]
     public async Task<ActionResult<PhraseHierarchyDto>> GeneratePhraseHierarchy(
         [FromBody] PhraseHierarchyGenerateDto bodyDto) => await Run(
         executor: async () =>

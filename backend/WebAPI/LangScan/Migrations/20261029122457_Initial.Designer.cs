@@ -11,7 +11,7 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 namespace LangScan.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    [Migration("20261028234221_Initial")]
+    [Migration("20261029122457_Initial")]
     partial class Initial
     {
         /// <inheritdoc />
@@ -146,7 +146,8 @@ namespace LangScan.Migrations
 
                     b.Property<string>("ProficiencyLevel")
                         .IsRequired()
-                        .HasColumnType("text");
+                        .HasMaxLength(255)
+                        .HasColumnType("character varying(255)");
 
                     b.Property<uint>("Version")
                         .IsConcurrencyToken()

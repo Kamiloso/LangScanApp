@@ -1,13 +1,40 @@
 ﻿using System;
+using System.Text;
 
 namespace LangScan.Domain.Exceptions;
 
-public abstract class AbortException(int status, string code, string message) : Exception(message)
+public abstract class AbortException(
+    int status, string detail = "No detail provided") : Exception()
 {
     public int Status { get; } = status;
-    public string Code { get; } = code;
+    public string Code => ToSnakeCase(GetType().Name);
+    public string Title => ToSentenceCase(GetType().Name);
+    public string Detail { get; } = detail;
 
-    public static class HttpStatus
+    private static string ToSnakeCase(string input)
+    {
+        StringBuilder sb = new();
+
+        foreach (char c in input)
+        {
+            if (char.IsUpper(c) && sb.Length > 0)
+                sb.Append('_');
+
+            sb.Append(char.ToLowerInvariant(c));
+        }
+
+        return sb.ToString();
+    }
+
+    private static string ToSentenceCase(string input)
+    {
+        if (string.IsNullOrEmpty(input))
+            return input;
+
+        return char.ToUpperInvariant(input[0]) + ToSnakeCase(input)[1..].Replace('_', ' ');
+    }
+
+    protected static class HttpStatus
     {
         public const int BAD_REQUEST = 400;
         public const int UNAUTHORIZED = 401;

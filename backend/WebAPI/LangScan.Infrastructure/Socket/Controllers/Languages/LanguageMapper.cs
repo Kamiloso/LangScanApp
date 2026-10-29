@@ -2,7 +2,7 @@
 using LangScan.Infrastructure.Socket.Controllers.Languages.Dto;
 using Riok.Mapperly.Abstractions;
 
-namespace LangScan.Infrastructure.Socket.Controllers.Accounts;
+namespace LangScan.Infrastructure.Socket.Controllers.Languages;
 
 [Mapper]
 public partial class LanguageMapper

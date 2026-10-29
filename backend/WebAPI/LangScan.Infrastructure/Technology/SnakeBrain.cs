@@ -26,7 +26,7 @@ internal class SnakeBrain(
         var responses = await apiResponse.Content.ReadFromJsonAsync<IEnumerable<SnakeResponse>>();
 
         if (responses?.All(r => r?.IsOk() == true) != true)
-            throw new InvalidBrainResponse();
+            throw new BrainIncorrectResponse();
 
         return responses;
     }

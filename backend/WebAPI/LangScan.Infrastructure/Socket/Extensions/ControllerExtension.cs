@@ -1,4 +1,5 @@
 ﻿using LangScan.Domain.Exceptions;
+using LangScan.Domain.Model;
 using LangScan.Infrastructure.Technology;
 using Microsoft.AspNetCore.Mvc;
 using System;
@@ -21,11 +22,13 @@ public abstract class ControllerExtension(IRequestRetrySystem retry) : Controlle
         }
         catch (AbortException ex)
         {
-            return StatusCode(ex.Status, new
+            return StatusCode(ex.Status, new ProblemInfo
             {
-                status = ex.Status,
-                code = ex.Code,
-                message = ex.Message,
+                Status = ex.Status,
+                Type = "about:blank",
+                Title = ex.Title,
+                Detail = ex.Detail,
+                Code = ex.Code,
             });
         }
     }

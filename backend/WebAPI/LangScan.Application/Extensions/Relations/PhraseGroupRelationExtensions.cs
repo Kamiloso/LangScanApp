@@ -1,5 +1,5 @@
 ﻿using LangScan.Domain.Model.Entities;
-using LangScan.Domain.Model.Pure;
+using LangScan.Domain.Model.Composite;
 using System.Linq;
 
 namespace LangScan.Application.Extensions.Relations;

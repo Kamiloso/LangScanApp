@@ -22,6 +22,10 @@ internal class PhraseGroupTable : IEntityTypeConfiguration<PhraseGroup>
         builder.Property(g => g.IdLanguageLearning)
             .IsRequired();
 
+        builder.Property(g => g.ProficiencyLevel)
+            .HasMaxLength(Const.LEN_255)
+            .IsRequired();
+
         builder.Property(g => g.Name)
             .HasMaxLength(Const.LEN_255)
             .IsRequired();

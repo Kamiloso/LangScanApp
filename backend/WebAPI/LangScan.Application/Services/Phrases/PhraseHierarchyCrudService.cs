@@ -6,7 +6,7 @@ using LangScan.Application.Interfaces;
 using LangScan.Application.SubServices;
 using LangScan.Domain.Crud;
 using LangScan.Domain.Exceptions.Reasons;
-using LangScan.Domain.Model.Pure;
+using LangScan.Domain.Model.Composite;
 using Microsoft.EntityFrameworkCore;
 using System.Collections.Generic;
 using System.Data;
@@ -47,16 +47,13 @@ internal class PhraseHierarchyCrudService(
     {
         var user = await reqAuth.Login();
 
-        if (!body.ReferencesUser(user)) // user deletion is forbidden
-            throw new InvalidUser();
+        body.SanitizeForCreation();
 
-        if (!body.IsValidForCreation())
-            throw new InvalidCrudRequest();
+        if (!body.ReferencesUser(user)) // user deletion is forbidden
+            throw new InvalidUserReference();
 
         return await db.UseTransaction(IsolationLevel.ReadCommitted, async () =>
         {
-            body.ResetPrimaryKeys();
-
             if (!await body.PhraseGroup.ReferencedLanguagesExistAsync(db.Languages))
                 throw new LanguageNotFound(); // language deletion is forbidden
 

@@ -10,12 +10,12 @@ public record PhraseHierarchyGenerate(
     string ProficiencyLevel,
     string TextBlock)
 {
-    public PhraseGroup DerivePhraseGroup(User user, Language langKnown, Language langLearning)
+    public PhraseGroup DerivePhraseGroup(User user)
         => new()
         {
             IdUser = user.Id,
-            IdLanguageKnown = langKnown.Id,
-            IdLanguageLearning = langLearning.Id,
+            IdLanguageKnown = IdLangKnown,
+            IdLanguageLearning = IdLangLearning,
             ProficiencyLevel = ProficiencyLevel,
             Name = Name,
             Description = Description

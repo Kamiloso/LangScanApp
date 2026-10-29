@@ -52,7 +52,7 @@ namespace LangScan.Migrations
                     IdUser = table.Column<long>(type: "bigint", nullable: false),
                     IdLanguageKnown = table.Column<long>(type: "bigint", nullable: false),
                     IdLanguageLearning = table.Column<long>(type: "bigint", nullable: false),
-                    ProficiencyLevel = table.Column<string>(type: "text", nullable: false),
+                    ProficiencyLevel = table.Column<string>(type: "character varying(255)", maxLength: 255, nullable: false),
                     Name = table.Column<string>(type: "character varying(255)", maxLength: 255, nullable: false),
                     Description = table.Column<string>(type: "character varying(65535)", maxLength: 65535, nullable: false),
                     xmin = table.Column<uint>(type: "xid", rowVersion: true, nullable: false)

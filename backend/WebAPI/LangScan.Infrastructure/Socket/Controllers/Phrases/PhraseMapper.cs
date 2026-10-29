@@ -1,11 +1,11 @@
 ﻿using LangScan.Domain.Crud;
 using LangScan.Domain.Model.Entities;
-using LangScan.Domain.Model.Pure;
+using LangScan.Domain.Model.Composite;
 using LangScan.Domain.Model.Requests;
-using LangScan.Infrastructure.Socket.Controllers.Phrases.Dto;
 using Riok.Mapperly.Abstractions;
+using LangScan.Infrastructure.Socket.Controllers.Phrases.Dto;
 
-namespace LangScan.Infrastructure.Socket.Controllers.Phrases.Mappers;
+namespace LangScan.Infrastructure.Socket.Controllers.Phrases;
 
 [Mapper]
 public partial class PhraseMapper : ICrudMapper<PhraseHierarchy, PhraseHierarchyDto>

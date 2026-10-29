@@ -1,8 +1,7 @@
 ﻿using LangScan.Domain.Model.Entities;
 using System.Collections.Generic;
-using System.Linq;
 
-namespace LangScan.Domain.Model.Pure;
+namespace LangScan.Domain.Model.Composite;
 
 public record PhraseHierarchy
 {
@@ -16,17 +15,10 @@ public record PhraseHierarchy
     public bool ReferencesUser(User user)
         => PhraseGroup.IdUser == user.Id;
 
-    public bool IsValidForCreation()
-        => PhraseGroup.Id == default && Phrases.All(p => p.IdPhraseGroup == PhraseGroup.Id);
-
-    public void ResetPrimaryKeys()
+    public void SanitizeForCreation()
     {
         PhraseGroup.Id = default;
-
-        foreach (var phrase in Phrases)
-        {
-            phrase.Id = default;
-        }
+        UpdateChildrenReferences();
     }
 
     public void UpdateChildrenReferences()
