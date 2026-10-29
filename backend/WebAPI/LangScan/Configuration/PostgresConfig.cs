@@ -3,16 +3,9 @@ using Microsoft.AspNetCore.Builder;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
-using System;
 using System.Threading.Tasks;
 
 namespace LangScan.Configuration;
-
-file record PostgresOptions
-{
-    public int MaxRetryCount { get; init; }
-    public int MaxRetryDelayMs { get; init; }
-}
 
 public static class PostgresConfig
 {
@@ -20,17 +13,10 @@ public static class PostgresConfig
     {
         string? connectionString = builder.Configuration.GetConnectionString("Default");
 
-        var dbOptions = builder.Configuration.GetSection("Postgres").Get<PostgresOptions>()
-            ?? throw new InvalidOperationException("Postgres configuration section is missing or invalid");
-
         builder.Services.AddDbContext<AppDbContext>(options =>
             options.UseNpgsql(connectionString, b =>
             {
                 b.MigrationsAssembly("LangScan");
-                b.EnableRetryOnFailure(
-                    maxRetryCount: dbOptions.MaxRetryCount,
-                    maxRetryDelay: TimeSpan.FromMilliseconds(dbOptions.MaxRetryDelayMs),
-                    errorCodesToAdd: null);
             }));
 
         return builder;

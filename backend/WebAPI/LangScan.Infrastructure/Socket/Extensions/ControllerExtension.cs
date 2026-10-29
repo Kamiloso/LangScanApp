@@ -1,11 +1,12 @@
 ﻿using LangScan.Domain.Exceptions;
+using LangScan.Infrastructure.Technology;
 using Microsoft.AspNetCore.Mvc;
 using System;
 using System.Threading.Tasks;
 
 namespace LangScan.Infrastructure.Socket.Extensions;
 
-public abstract partial class ControllerExtension : ControllerBase
+public abstract class ControllerExtension(IRequestRetrySystem retry) : ControllerBase
 {
     protected async Task<ActionResult<T>> Run<T>(
         Func<Task<T>> executor,
@@ -15,7 +16,7 @@ public abstract partial class ControllerExtension : ControllerBase
 
         try
         {
-            T data = await executor();
+            T data = await retry.RetryOnError(executor);
             return success(data);
         }
         catch (AbortException ex)

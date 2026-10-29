@@ -6,11 +6,9 @@ namespace LangScan.Domain.Model.Entities;
 public record PhraseGroup : ICrudEntity
 {
     public long Id { get; set; }
-
-    // Immutable
-    public required long IdUser { get; init; }
-    public required long IdLanguageKnown { get; init; }
-    public required long IdLanguageLearning { get; init; }
+    public required long IdUser { get; set; }
+    public required long IdLanguageKnown { get; set; }
+    public required long IdLanguageLearning { get; set; }
 
     // Mutable
     public required string ProficiencyLevel { get; set; }

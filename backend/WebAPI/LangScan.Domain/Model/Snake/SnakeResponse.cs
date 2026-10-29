@@ -1,4 +1,5 @@
 ﻿using LangScan.Domain.Config;
+using LangScan.Domain.Model.Entities;
 using System.Collections.Generic;
 using System.Linq;
 
@@ -16,4 +17,14 @@ public record SnakeResponse(
         List<string> words = [w1, w2, w3, w4];
         return words.All(s => s.Length <= Const.LEN_4096);
     }
+
+    public Phrase DerivePhrase(PhraseGroup phraseGroup)
+        => new()
+        {
+            IdPhraseGroup = phraseGroup.Id,
+            WordKnown = WordKnown,
+            WordLearning = WordLearning,
+            DefinitionKnown = DefinitionKnown,
+            DefinitionLearning = DefinitionLearning,
+        };
 }

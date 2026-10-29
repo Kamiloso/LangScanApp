@@ -15,6 +15,10 @@ public static class QueryableExtensions
         where T : ICrudEntity
         => self.WhereId(id).ToSingleAsync();
 
+    public static Task<T?> SelectAgain<T>(this IQueryable<T> self, T entity)
+        where T : ICrudEntity
+        => self.FindByIdOrDefaultAsync(entity.Id);
+
     public static Task<T?> ToSingleAsync<T>(this IQueryable<T> self)
         => self.FirstOrDefaultAsync();
 }

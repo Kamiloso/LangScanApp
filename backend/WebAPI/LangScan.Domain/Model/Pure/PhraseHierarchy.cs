@@ -6,29 +6,34 @@ namespace LangScan.Domain.Model.Pure;
 
 public record PhraseHierarchy
 {
-    public required PhraseGroup PhraseGroup { get; set; }
+    public required PhraseGroup PhraseGroup { get; init; }
     public required IEnumerable<Phrase> Phrases
     {
         get;
-        set => field = [.. value];
+        init => field = [.. value];
     }
 
     public bool ReferencesUser(User user)
         => PhraseGroup.IdUser == user.Id;
 
-    public bool IsValidForInsertion(bool isFresh)
-        => isFresh == (PhraseGroup.Id == default) && Phrases.All(p => p.IdPhraseGroup == PhraseGroup.Id);
+    public bool IsValidForCreation()
+        => PhraseGroup.Id == default && Phrases.All(p => p.IdPhraseGroup == PhraseGroup.Id);
 
-    public void RecreateChildren()
+    public void ResetPrimaryKeys()
     {
-        List<Phrase> putPhrases = [];
+        PhraseGroup.Id = default;
 
         foreach (var phrase in Phrases)
         {
-            var newPhrase = phrase with { IdPhraseGroup = PhraseGroup.Id };
-            putPhrases.Add(newPhrase);
+            phrase.Id = default;
         }
+    }
 
-        Phrases = putPhrases;
+    public void UpdateChildrenReferences()
+    {
+        foreach (var phrase in Phrases)
+        {
+            phrase.IdPhraseGroup = PhraseGroup.Id;
+        }
     }
 }

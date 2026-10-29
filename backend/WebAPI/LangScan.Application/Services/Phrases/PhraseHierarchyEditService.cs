@@ -37,15 +37,20 @@ internal class PhraseHierarchyEditService(
         var phrase = await db.Phrases
             .FindByIdOrDefaultAsync(id) ?? throw new PhraseHierarchyNotFound();
 
-        _ = await db.PhraseGroups // authorize ownership
-            .WhereReferences(user)
-            .WhereContains(phrase)
-            .ToSingleAsync() ?? throw new PhraseHierarchyNotFound();
+        await AuthorizeOwnership(user, phrase);
 
         phrase.ApplyPatch(body);
 
         await db.SaveChangesAsync();
 
         return phrase;
+    }
+
+    private async Task AuthorizeOwnership(User user, Phrase phrase)
+    {
+        _ = await db.PhraseGroups
+            .WhereReferences(user)
+            .WhereContains(phrase)
+            .ToSingleAsync() ?? throw new PhraseHierarchyNotFound();
     }
 }

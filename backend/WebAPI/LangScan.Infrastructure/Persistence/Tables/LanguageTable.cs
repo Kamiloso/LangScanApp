@@ -9,8 +9,7 @@ internal class LanguageTable : IEntityTypeConfiguration<Language>
 {
     public void Configure(EntityTypeBuilder<Language> builder)
     {
-        builder.ToTable("languages")
-            .HasKey(l => l.Id);
+        builder.PrepareTable("languages");
 
         // Properties
 

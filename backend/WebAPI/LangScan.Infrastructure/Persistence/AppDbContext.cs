@@ -10,7 +10,7 @@ using System.Threading.Tasks;
 
 namespace LangScan.Infrastructure.Persistence;
 
-public class AppDbContext(DbContextOptions<AppDbContext> options)
+public partial class AppDbContext(DbContextOptions<AppDbContext> options)
     : DbContext(options), IAppDbContext
 {
     private static readonly FrozenSet<Type> DeletionRestrictedTypes = [typeof(Language), typeof(User)];
@@ -30,27 +30,35 @@ public class AppDbContext(DbContextOptions<AppDbContext> options)
         modelBuilder.ApplyConfiguration(new LanguageTable());
     }
 
-    public Task<T> UseTransaction<T>(IsolationLevel isolationLevel, Func<Task<T>> func)
+    public override Task<int> SaveChangesAsync(CancellationToken cancellationToken = default)
     {
-        var strategy = Database.CreateExecutionStrategy();
-
-        return strategy.ExecuteAsync(async () =>
+        foreach (var entry in ChangeTracker.Entries())
         {
-            await using var transaction = await Database.BeginTransactionAsync(isolationLevel);
+            Type entityType = entry.Entity.GetType();
 
-            try
-            {
-                T result = await func();
-                await transaction.CommitAsync();
+            if (entry.State == EntityState.Deleted && DeletionRestrictedTypes.Contains(entityType))
+                throw new InvalidOperationException($"Deletion of entity '{entityType}' is forbidden");
+        }
 
-                return result;
-            }
-            catch
-            {
-                await transaction.RollbackAsync();
-                throw;
-            }
-        });
+        return base.SaveChangesAsync(cancellationToken);
+    }
+
+    public async Task<T> UseTransaction<T>(IsolationLevel isolationLevel, Func<Task<T>> func)
+    {
+        await using var transaction = await Database.BeginTransactionAsync(isolationLevel);
+
+        try
+        {
+            T result = await func();
+            await transaction.CommitAsync();
+
+            return result;
+        }
+        catch
+        {
+            await transaction.RollbackAsync();
+            throw;
+        }
     }
 
     public Task UseTransaction(IsolationLevel isolationLevel, Func<Task> action)
@@ -62,16 +70,5 @@ public class AppDbContext(DbContextOptions<AppDbContext> options)
         });
     }
 
-    public override Task<int> SaveChangesAsync(CancellationToken cancellationToken = default)
-    {
-        foreach (var entry in ChangeTracker.Entries())
-        {
-            Type entityType = entry.Entity.GetType();
-
-            if (entry.State == EntityState.Deleted && DeletionRestrictedTypes.Contains(entityType))
-                throw new InvalidOperationException($"Deletion of entity '{entityType}' is strictly forbidden");
-        }
-
-        return base.SaveChangesAsync(cancellationToken);
-    }
+    public void ClearTracker() => ChangeTracker.Clear();
 }

@@ -47,22 +47,24 @@ internal class PhraseHierarchyCrudService(
     {
         var user = await reqAuth.Login();
 
-        if (!body.ReferencesUser(user))
+        if (!body.ReferencesUser(user)) // user deletion is forbidden
             throw new InvalidUser();
 
-        if (!body.IsValidForInsertion(isFresh: true))
+        if (!body.IsValidForCreation())
             throw new InvalidCrudRequest();
 
         return await db.UseTransaction(IsolationLevel.ReadCommitted, async () =>
         {
+            body.ResetPrimaryKeys();
+
             if (!await body.PhraseGroup.ReferencedLanguagesExistAsync(db.Languages))
-                throw new LanguageNotFound();
+                throw new LanguageNotFound(); // language deletion is forbidden
 
             db.PhraseGroups.Add(body.PhraseGroup);
 
             await db.SaveChangesAsync();
 
-            body.RecreateChildren();
+            body.UpdateChildrenReferences();
             db.Phrases.AddRange(body.Phrases);
 
             await db.SaveChangesAsync();

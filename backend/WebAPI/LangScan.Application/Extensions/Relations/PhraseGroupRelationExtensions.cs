@@ -4,7 +4,7 @@ using System.Linq;
 
 namespace LangScan.Application.Extensions.Relations;
 
-public static class PhraseGroupExtensions
+public static class PhraseGroupRelationExtensions
 {
     public static IQueryable<PhraseGroup> WhereReferences(this IQueryable<PhraseGroup> self, User user)
         => self.Where(g => g.IdUser == user.Id);

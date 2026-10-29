@@ -11,7 +11,7 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 namespace LangScan.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    [Migration("20261027230911_Initial")]
+    [Migration("20261028234221_Initial")]
     partial class Initial
     {
         /// <inheritdoc />
@@ -36,6 +36,12 @@ namespace LangScan.Migrations
                         .IsRequired()
                         .HasMaxLength(255)
                         .HasColumnType("character varying(255)");
+
+                    b.Property<uint>("Version")
+                        .IsConcurrencyToken()
+                        .ValueGeneratedOnAddOrUpdate()
+                        .HasColumnType("xid")
+                        .HasColumnName("xmin");
 
                     b.HasKey("Id");
 
@@ -88,6 +94,12 @@ namespace LangScan.Migrations
                     b.Property<long>("IdPhraseGroup")
                         .HasColumnType("bigint");
 
+                    b.Property<uint>("Version")
+                        .IsConcurrencyToken()
+                        .ValueGeneratedOnAddOrUpdate()
+                        .HasColumnType("xid")
+                        .HasColumnName("xmin");
+
                     b.Property<string>("WordKnown")
                         .IsRequired()
                         .HasMaxLength(4096)
@@ -136,6 +148,12 @@ namespace LangScan.Migrations
                         .IsRequired()
                         .HasColumnType("text");
 
+                    b.Property<uint>("Version")
+                        .IsConcurrencyToken()
+                        .ValueGeneratedOnAddOrUpdate()
+                        .HasColumnType("xid")
+                        .HasColumnName("xmin");
+
                     b.HasKey("Id");
 
                     b.HasIndex("IdLanguageKnown");
@@ -167,6 +185,12 @@ namespace LangScan.Migrations
                         .IsRequired()
                         .HasMaxLength(255)
                         .HasColumnType("character varying(255)");
+
+                    b.Property<uint>("Version")
+                        .IsConcurrencyToken()
+                        .ValueGeneratedOnAddOrUpdate()
+                        .HasColumnType("xid")
+                        .HasColumnName("xmin");
 
                     b.HasKey("Id");
 

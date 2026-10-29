@@ -19,7 +19,8 @@ namespace LangScan.Migrations
                 {
                     Id = table.Column<long>(type: "bigint", nullable: false)
                         .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn),
-                    Code = table.Column<string>(type: "character varying(255)", maxLength: 255, nullable: false)
+                    Code = table.Column<string>(type: "character varying(255)", maxLength: 255, nullable: false),
+                    xmin = table.Column<uint>(type: "xid", rowVersion: true, nullable: false)
                 },
                 constraints: table =>
                 {
@@ -34,7 +35,8 @@ namespace LangScan.Migrations
                         .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn),
                     Email = table.Column<string>(type: "character varying(255)", maxLength: 255, nullable: false),
                     AnimalHealth = table.Column<int>(type: "integer", nullable: false),
-                    AnimalFood = table.Column<string>(type: "character varying(65535)", maxLength: 65535, nullable: false)
+                    AnimalFood = table.Column<string>(type: "character varying(65535)", maxLength: 65535, nullable: false),
+                    xmin = table.Column<uint>(type: "xid", rowVersion: true, nullable: false)
                 },
                 constraints: table =>
                 {
@@ -52,7 +54,8 @@ namespace LangScan.Migrations
                     IdLanguageLearning = table.Column<long>(type: "bigint", nullable: false),
                     ProficiencyLevel = table.Column<string>(type: "text", nullable: false),
                     Name = table.Column<string>(type: "character varying(255)", maxLength: 255, nullable: false),
-                    Description = table.Column<string>(type: "character varying(65535)", maxLength: 65535, nullable: false)
+                    Description = table.Column<string>(type: "character varying(65535)", maxLength: 65535, nullable: false),
+                    xmin = table.Column<uint>(type: "xid", rowVersion: true, nullable: false)
                 },
                 constraints: table =>
                 {
@@ -87,7 +90,8 @@ namespace LangScan.Migrations
                     WordKnown = table.Column<string>(type: "character varying(4096)", maxLength: 4096, nullable: false),
                     WordLearning = table.Column<string>(type: "character varying(4096)", maxLength: 4096, nullable: false),
                     DefinitionKnown = table.Column<string>(type: "character varying(4096)", maxLength: 4096, nullable: false),
-                    DefinitionLearning = table.Column<string>(type: "character varying(4096)", maxLength: 4096, nullable: false)
+                    DefinitionLearning = table.Column<string>(type: "character varying(4096)", maxLength: 4096, nullable: false),
+                    xmin = table.Column<uint>(type: "xid", rowVersion: true, nullable: false)
                 },
                 constraints: table =>
                 {

@@ -1,4 +1,6 @@
-﻿namespace LangScan.Domain.Model.Requests;
+﻿using LangScan.Domain.Model.Entities;
+
+namespace LangScan.Domain.Model.Requests;
 
 public record PhraseHierarchyGenerate(
     string Name,
@@ -6,5 +8,16 @@ public record PhraseHierarchyGenerate(
     long IdLangKnown,
     long IdLangLearning,
     string ProficiencyLevel,
-    string TextBlock
-);
+    string TextBlock)
+{
+    public PhraseGroup DerivePhraseGroup(User user, Language langKnown, Language langLearning)
+        => new()
+        {
+            IdUser = user.Id,
+            IdLanguageKnown = langKnown.Id,
+            IdLanguageLearning = langLearning.Id,
+            ProficiencyLevel = ProficiencyLevel,
+            Name = Name,
+            Description = Description
+        };
+}

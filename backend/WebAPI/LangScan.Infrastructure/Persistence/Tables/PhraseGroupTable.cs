@@ -9,8 +9,7 @@ internal class PhraseGroupTable : IEntityTypeConfiguration<PhraseGroup>
 {
     public void Configure(EntityTypeBuilder<PhraseGroup> builder)
     {
-        builder.ToTable("phrase_groups")
-            .HasKey(g => g.Id);
+        builder.PrepareTable("phrase_groups");
 
         // Properties
 

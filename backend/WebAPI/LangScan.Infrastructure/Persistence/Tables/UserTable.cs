@@ -9,8 +9,7 @@ internal class UserTable : IEntityTypeConfiguration<User>
 {
     public void Configure(EntityTypeBuilder<User> builder)
     {
-        builder.ToTable("users")
-            .HasKey(u => u.Id);
+        builder.PrepareTable("users");
 
         // Properties
 

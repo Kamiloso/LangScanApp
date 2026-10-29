@@ -3,6 +3,7 @@ using LangScan.Domain.Model.Entities;
 using LangScan.Domain.Model.Requests;
 using LangScan.Infrastructure.Socket.Controllers.Accounts.Dto;
 using LangScan.Infrastructure.Socket.Extensions;
+using LangScan.Infrastructure.Technology;
 using Microsoft.AspNetCore.Mvc;
 using System.Threading.Tasks;
 
@@ -11,8 +12,9 @@ namespace LangScan.Infrastructure.Socket.Controllers.Accounts;
 [ApiController]
 [Route("api/account")]
 public class AccountController(
+    IRequestRetrySystem retry,
     IUserService service,
-    AccountMapper mapper) : ControllerExtension
+    AccountMapper mapper) : ControllerExtension(retry)
 {
     [HttpGet]
     public async Task<ActionResult<AccountDto>> GetAccount() => await Run(

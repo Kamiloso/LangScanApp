@@ -3,6 +3,7 @@ using LangScan.Domain.Model.Pure;
 using LangScan.Infrastructure.Socket.Controllers.Phrases.Dto;
 using LangScan.Infrastructure.Socket.Controllers.Phrases.Mappers;
 using LangScan.Infrastructure.Socket.Extensions;
+using LangScan.Infrastructure.Technology;
 using Microsoft.AspNetCore.Mvc;
 using System.Collections.Generic;
 using System.Threading.Tasks;
@@ -12,8 +13,9 @@ namespace LangScan.Infrastructure.Socket.Controllers.Phrases;
 [ApiController]
 [Route("api/phrase-hierarchies")]
 public class PhraseHierarchyCrudController(
+    IRequestRetrySystem retry,
     IPhraseHierarchyCrudService service,
-    PhraseMapper mapper) : CrudControllerExtension<PhraseHierarchy, PhraseHierarchyDto>(service, mapper)
+    PhraseMapper mapper) : CrudControllerExtension<PhraseHierarchy, PhraseHierarchyDto>(service, mapper, retry)
 {
     [HttpGet("{id}")]
     public Task<ActionResult<PhraseHierarchyDto>> GetPhraseHierarchy(

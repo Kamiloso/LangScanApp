@@ -5,7 +5,7 @@ using System.Threading.Tasks;
 
 namespace LangScan.Application.Extensions.Entities;
 
-public static class PhraseGroupExtensions
+public static class PhraseGroupEntityExtensions
 {
     public static async Task<bool> ReferencedLanguagesExistAsync(this PhraseGroup self, IQueryable<Language> languages)
     {

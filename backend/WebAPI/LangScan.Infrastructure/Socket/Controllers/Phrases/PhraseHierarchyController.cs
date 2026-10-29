@@ -1,10 +1,12 @@
-﻿using LangScan.Application.Services.Phrases;
+﻿using LangScan.Application.Interfaces;
+using LangScan.Application.Services.Phrases;
 using LangScan.Domain.Model.Entities;
 using LangScan.Domain.Model.Pure;
 using LangScan.Domain.Model.Requests;
 using LangScan.Infrastructure.Socket.Controllers.Phrases.Dto;
 using LangScan.Infrastructure.Socket.Controllers.Phrases.Mappers;
 using LangScan.Infrastructure.Socket.Extensions;
+using LangScan.Infrastructure.Technology;
 using Microsoft.AspNetCore.Mvc;
 using System.Threading.Tasks;
 
@@ -13,9 +15,10 @@ namespace LangScan.Infrastructure.Socket.Controllers.Phrases;
 [ApiController]
 [Route("api/phrase-hierarchies")]
 public class PhraseHierarchyController(
+    IRequestRetrySystem retry,
     IPhraseHierarchyEditService editService,
     IPhraseHierarchyGenerateUseCase phraseHierarchyGenerate,
-    PhraseMapper mapper) : ControllerExtension
+    PhraseMapper mapper) : ControllerExtension(retry)
 {
     [HttpPatch]
     [Route("phrase-groups/{id}")]

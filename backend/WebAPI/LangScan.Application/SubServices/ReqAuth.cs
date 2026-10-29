@@ -1,8 +1,9 @@
 ﻿using AutoInterfaceAttributes;
+using LangScan.Application.Extensions.Entities;
 using LangScan.Application.Interfaces;
 using LangScan.Domain.Exceptions.Reasons;
 using LangScan.Domain.Model.Entities;
-using Microsoft.EntityFrameworkCore;
+using System.Data;
 using System.Threading.Tasks;
 
 namespace LangScan.Application.SubServices;
@@ -17,16 +18,20 @@ internal class ReqAuth(
         if (!authContext.TryGetEmail(out string email))
             throw new AuthorizationRequired();
 
-        var user = await db.Users.FirstOrDefaultAsync(u => u.Email == email);
+        return await db.Users.FindByEmailOrDefaultAsync(email)
+            ?? await db.UseTransaction(IsolationLevel.Serializable, async () =>
+            {
+                var reqUser = await db.Users.FindByEmailOrDefaultAsync(email);
 
-        if (user is null)
-        {
-            user = User.Create(email);
+                if (reqUser is null)
+                {
+                    reqUser = User.Create(email);
+                    db.Users.Add(reqUser);
 
-            await db.Users.AddAsync(user);
-            await db.SaveChangesAsync();
-        }
+                    await db.SaveChangesAsync();
+                }
 
-        return user;
+                return reqUser;
+            });
     }
 }

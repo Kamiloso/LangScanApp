@@ -18,4 +18,6 @@ public interface IAppDbContext
     Task UseTransaction(IsolationLevel isolationLevel, Func<Task> action);
 
     Task<int> SaveChangesAsync(CancellationToken cancellationToken = default);
+
+    void ClearTracker();
 }

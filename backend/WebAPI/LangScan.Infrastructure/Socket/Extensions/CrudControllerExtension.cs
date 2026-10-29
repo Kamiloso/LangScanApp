@@ -1,4 +1,5 @@
 ﻿using LangScan.Domain.Crud;
+using LangScan.Infrastructure.Technology;
 using Microsoft.AspNetCore.Mvc;
 using System.Collections.Generic;
 using System.Linq;
@@ -8,7 +9,8 @@ namespace LangScan.Infrastructure.Socket.Extensions;
 
 public abstract class CrudControllerExtension<TDomain, TDto>(
     ICrudService<TDomain> service,
-    ICrudMapper<TDomain, TDto> mapper) : ControllerExtension
+    ICrudMapper<TDomain, TDto> mapper,
+    IRequestRetrySystem retry) : ControllerExtension(retry)
     where TDomain : class
 {
     protected async Task<ActionResult<TDto>> Get(long id) => await Run(

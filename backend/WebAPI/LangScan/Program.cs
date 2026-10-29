@@ -4,6 +4,7 @@ using LangScan.Application.Services.Phrases;
 using LangScan.Application.Services.Users;
 using LangScan.Application.SubServices;
 using LangScan.Configuration;
+using LangScan.Domain.Systems;
 using LangScan.Infrastructure.Persistence;
 using LangScan.Infrastructure.Socket.Controllers.Accounts;
 using LangScan.Infrastructure.Socket.Controllers.Phrases.Mappers;
@@ -30,6 +31,7 @@ srv.AddHttpClient();
     srv.AddScoped<IAppDbContext, AppDbContext>();
     srv.AddScoped<IAuthContext, AuthContext>();
     srv.AddScoped<ISnakeBrain, SnakeBrain>();
+    srv.AddScoped<IRequestRetrySystem, RequestRetrySystem>();
 
     srv.AddSingleton<AccountMapper>();
     srv.AddSingleton<PhraseMapper>();
@@ -49,6 +51,11 @@ srv.AddHttpClient();
 
     // Languages
     srv.AddScoped<ILanguageService, LanguageService>();
+}
+
+// Domain
+{
+    srv.AddSingleton<IRetrySystem, RetrySystem>();
 }
 
 var app = builder.Build();
