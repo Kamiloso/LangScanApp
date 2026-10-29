@@ -11,7 +11,7 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 namespace LangScan.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    [Migration("20261029122457_Initial")]
+    [Migration("20261029172848_Initial")]
     partial class Initial
     {
         /// <inheritdoc />

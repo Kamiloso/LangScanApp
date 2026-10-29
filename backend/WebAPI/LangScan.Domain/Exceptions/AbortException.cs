@@ -7,31 +7,27 @@ public abstract class AbortException(
     int status, string detail = "No detail provided") : Exception()
 {
     public int Status { get; } = status;
-    public string Code => ToSnakeCase(GetType().Name);
     public string Title => ToSentenceCase(GetType().Name);
     public string Detail { get; } = detail;
-
-    private static string ToSnakeCase(string input)
-    {
-        StringBuilder sb = new();
-
-        foreach (char c in input)
-        {
-            if (char.IsUpper(c) && sb.Length > 0)
-                sb.Append('_');
-
-            sb.Append(char.ToLowerInvariant(c));
-        }
-
-        return sb.ToString();
-    }
 
     private static string ToSentenceCase(string input)
     {
         if (string.IsNullOrEmpty(input))
             return input;
 
-        return char.ToUpperInvariant(input[0]) + ToSnakeCase(input)[1..].Replace('_', ' ');
+        StringBuilder sb = new();
+        sb.Append(char.ToUpperInvariant(input[0]));
+
+        for (int i = 1; i < input.Length; i++)
+        {
+            char c = input[i];
+            if (char.IsUpper(c))
+                sb.Append(' ');
+
+            sb.Append(char.ToLowerInvariant(c));
+        }
+
+        return sb.ToString();
     }
 
     protected static class HttpStatus

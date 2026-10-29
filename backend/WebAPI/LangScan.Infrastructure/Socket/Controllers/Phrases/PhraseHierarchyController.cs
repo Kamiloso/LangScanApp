@@ -3,7 +3,7 @@ using LangScan.Domain.Exceptions.Reasons;
 using LangScan.Domain.Model.Composite;
 using LangScan.Domain.Model.Entities;
 using LangScan.Domain.Model.Requests;
-using LangScan.Infrastructure.Socket.Attributes;
+using LangScan.Infrastructure.Socket.Other;
 using LangScan.Infrastructure.Socket.Controllers.Phrases.Dto;
 using LangScan.Infrastructure.Socket.Extensions;
 using LangScan.Infrastructure.Technology;

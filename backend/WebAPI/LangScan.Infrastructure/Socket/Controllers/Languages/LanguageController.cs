@@ -1,6 +1,6 @@
 ﻿using LangScan.Application.Services.Languages;
 using LangScan.Domain.Model.Entities;
-using LangScan.Infrastructure.Socket.Attributes;
+using LangScan.Infrastructure.Socket.Other;
 using LangScan.Infrastructure.Socket.Controllers.Languages.Dto;
 using LangScan.Infrastructure.Socket.Extensions;
 using LangScan.Infrastructure.Technology;

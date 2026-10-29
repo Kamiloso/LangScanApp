@@ -1,7 +1,7 @@
 ﻿using LangScan.Application.Services.Users;
 using LangScan.Domain.Model.Entities;
 using LangScan.Domain.Model.Requests;
-using LangScan.Infrastructure.Socket.Attributes;
+using LangScan.Infrastructure.Socket.Other;
 using LangScan.Infrastructure.Socket.Controllers.Accounts.Dto;
 using LangScan.Infrastructure.Socket.Extensions;
 using LangScan.Infrastructure.Technology;
@@ -31,7 +31,7 @@ public class AccountController(
         }
     );
 
-    [HttpPatch]
+    [HttpPatch("animal")]
     [SwaggerOperation(Summary = "Update animal data")]
     [Returns<AccountDto>(HttpStatusCode.OK)]
     [Throws(HttpStatusCode.Unauthorized, "Missing or invalid authentication token.")]
