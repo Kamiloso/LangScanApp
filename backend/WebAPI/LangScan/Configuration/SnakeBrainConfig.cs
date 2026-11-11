@@ -8,7 +8,7 @@ namespace LangScan.Configuration;
 file record SnakeBrainOptions
 {
     public required string HttpAddress { get; init; }
-    public int TimeoutMs { get; init; }
+    public required int TimeoutMs { get; init; }
 }
 
 public static class SnakeBrainConfig

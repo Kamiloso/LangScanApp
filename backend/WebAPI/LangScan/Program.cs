@@ -19,6 +19,7 @@ var builder = WebApplication.CreateBuilder(args);
 builder.LoadAppConfig();
 builder.SetupPostgres();
 builder.SetupSnakeBrainClient();
+builder.AddGoogleJwtAuthentication();
 
 var srv = builder.Services;
 
@@ -26,6 +27,7 @@ srv.AddEndpointsApiExplorer();
 srv.AddSwaggerGenWithOptions();
 srv.AddHttpClient();
 srv.AddControllers();
+srv.AddHttpContextAccessor();
 
 // Infrastructure
 {
@@ -33,6 +35,7 @@ srv.AddControllers();
     srv.AddScoped<IAuthContext, AuthContext>();
     srv.AddScoped<ISnakeBrain, SnakeBrain>();
     srv.AddScoped<IRequestRetrySystem, RequestRetrySystem>();
+    srv.AddScoped<IAuthContext, AuthContext>();
 
     srv.AddSingleton<AccountMapper>();
     srv.AddSingleton<PhraseMapper>();
@@ -62,6 +65,8 @@ srv.AddControllers();
 var app = builder.Build();
 
 app.SetupSwagger();
+app.UseAuthentication();
+app.UseAuthorization();
 app.MapControllers();
 
 await app.Start(args);
