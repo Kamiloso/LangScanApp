@@ -20,6 +20,8 @@ namespace LangScan.Migrations
                     Id = table.Column<long>(type: "bigint", nullable: false)
                         .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn),
                     Code = table.Column<string>(type: "character varying(255)", maxLength: 255, nullable: false),
+                    LearningAllowed = table.Column<bool>(type: "boolean", nullable: false),
+                    KnownAllowed = table.Column<bool>(type: "boolean", nullable: false),
                     xmin = table.Column<uint>(type: "xid", rowVersion: true, nullable: false)
                 },
                 constraints: table =>
@@ -106,13 +108,15 @@ namespace LangScan.Migrations
 
             migrationBuilder.InsertData(
                 table: "languages",
-                columns: new[] { "Id", "Code" },
+                columns: new[] { "Id", "Code", "KnownAllowed", "LearningAllowed" },
                 values: new object[,]
                 {
-                    { 1L, "pl" },
-                    { 2L, "en" },
-                    { 3L, "de" },
-                    { 4L, "es" }
+                    { 1L, "pl", true, false },
+                    { 2L, "en", true, true },
+                    { 3L, "es", false, true },
+                    { 4L, "de", false, true },
+                    { 5L, "fr", false, true },
+                    { 6L, "it", false, true }
                 });
 
             migrationBuilder.CreateIndex(

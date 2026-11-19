@@ -11,7 +11,7 @@ public record PhraseGroup : ICrudEntity
     public required long IdLanguageLearning { get; set; }
 
     // Mutable
-    public required string ProficiencyLevel { get; set; }
+    public required string? ProficiencyLevel { get; set; }
     public required string Name { get; set; }
     public required string Description { get; set; }
 

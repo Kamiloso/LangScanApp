@@ -11,8 +11,8 @@ public record Phrase : ICrudEntity
     // Mutable
     public required string WordKnown { get; set; }
     public required string WordLearning { get; set; }
-    public required string DefinitionKnown { get; set; }
-    public required string DefinitionLearning { get; set; }
+    public required string? DefinitionKnown { get; set; }
+    public required string? DefinitionLearning { get; set; }
 
     public void ApplyPatch(PhrasePatch patch)
     {

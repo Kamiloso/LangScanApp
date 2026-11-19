@@ -11,7 +11,7 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 namespace LangScan.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    [Migration("20261029172848_Initial")]
+    [Migration("20261119195137_Initial")]
     partial class Initial
     {
         /// <inheritdoc />
@@ -37,6 +37,12 @@ namespace LangScan.Migrations
                         .HasMaxLength(255)
                         .HasColumnType("character varying(255)");
 
+                    b.Property<bool>("KnownAllowed")
+                        .HasColumnType("boolean");
+
+                    b.Property<bool>("LearningAllowed")
+                        .HasColumnType("boolean");
+
                     b.Property<uint>("Version")
                         .IsConcurrencyToken()
                         .ValueGeneratedOnAddOrUpdate()
@@ -54,22 +60,44 @@ namespace LangScan.Migrations
                         new
                         {
                             Id = 1L,
-                            Code = "pl"
+                            Code = "pl",
+                            KnownAllowed = true,
+                            LearningAllowed = false
                         },
                         new
                         {
                             Id = 2L,
-                            Code = "en"
+                            Code = "en",
+                            KnownAllowed = true,
+                            LearningAllowed = true
                         },
                         new
                         {
                             Id = 3L,
-                            Code = "de"
+                            Code = "es",
+                            KnownAllowed = false,
+                            LearningAllowed = true
                         },
                         new
                         {
                             Id = 4L,
-                            Code = "es"
+                            Code = "de",
+                            KnownAllowed = false,
+                            LearningAllowed = true
+                        },
+                        new
+                        {
+                            Id = 5L,
+                            Code = "fr",
+                            KnownAllowed = false,
+                            LearningAllowed = true
+                        },
+                        new
+                        {
+                            Id = 6L,
+                            Code = "it",
+                            KnownAllowed = false,
+                            LearningAllowed = true
                         });
                 });
 

@@ -1,5 +1,4 @@
 ﻿using LangScan.Application.Services.Phrases;
-using LangScan.Domain.Exceptions.Reasons;
 using LangScan.Domain.Model.Composite;
 using LangScan.Domain.Model.Entities;
 using LangScan.Domain.Model.Requests;
@@ -58,6 +57,7 @@ public class PhraseHierarchyController(
     [SwaggerOperation(Summary = "Generate new phrase hierarchy")]
     [Returns<PhraseHierarchyDto>(HttpStatusCode.OK)]
     [Throws(HttpStatusCode.Unauthorized, "Missing or invalid authentication token.")]
+    [Throws(HttpStatusCode.Conflict, "Not supported language combination.")]
     [Throws(HttpStatusCode.NotFound, "Provided known or learning language ID does not exist.")]
     public async Task<ActionResult<PhraseHierarchyDto>> GeneratePhraseHierarchy(
         [FromBody] PhraseHierarchyGenerateDto bodyDto) => await Run(

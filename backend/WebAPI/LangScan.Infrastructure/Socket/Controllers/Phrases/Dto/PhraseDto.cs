@@ -14,7 +14,7 @@ public record PhraseDto(
     string WordLearning,
 
     [MaxLength(Const.LEN_4096)]
-    string DefinitionKnown,
+    string? DefinitionKnown,
 
     [MaxLength(Const.LEN_4096)]
-    string DefinitionLearning);
+    string? DefinitionLearning);

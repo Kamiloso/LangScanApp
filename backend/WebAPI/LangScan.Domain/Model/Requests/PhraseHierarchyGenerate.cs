@@ -7,7 +7,7 @@ public record PhraseHierarchyGenerate(
     string Description,
     long IdLangKnown,
     long IdLangLearning,
-    string ProficiencyLevel,
+    string? ProficiencyLevel,
     string TextBlock)
 {
     public PhraseGroup DerivePhraseGroup(User user)

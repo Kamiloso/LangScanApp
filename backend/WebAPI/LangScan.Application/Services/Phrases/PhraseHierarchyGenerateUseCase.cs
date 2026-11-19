@@ -28,8 +28,14 @@ internal class PhraseHierarchyGenerateUseCase(
         var langKnown = await db.Languages
             .FindByIdOrDefaultAsync(body.IdLangKnown) ?? throw new LanguageNotFound();
 
+        if (!langKnown.KnownAllowed)
+            throw new LanguageCombinationNotSupported();
+
         var langLearning = await db.Languages
             .FindByIdOrDefaultAsync(body.IdLangLearning) ?? throw new LanguageNotFound();
+
+        if (!langLearning.LearningAllowed)
+            throw new LanguageCombinationNotSupported();
 
         _snakeResponses ??= await snakeBrain.ProcessTextBlock(new SnakeRequest(
             langKnown.Code,

@@ -8,8 +8,8 @@ namespace LangScan.Domain.Model.Snake;
 public record SnakeResponse(
     string WordKnown,
     string WordLearning,
-    string DefinitionKnown,
-    string DefinitionLearning)
+    string? DefinitionKnown,
+    string? DefinitionLearning)
 {
     public bool IsOk()
     {
