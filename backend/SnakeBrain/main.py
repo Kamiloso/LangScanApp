@@ -1,63 +1,69 @@
-import random
-import uvicorn
-from fastapi import FastAPI
-from pydantic import BaseModel
-from typing import List
+from typing import List, Optional
 
-app = FastAPI(title="SnakeBrain Mock API")
+from fastapi import FastAPI, HTTPException
+from pydantic import BaseModel, ValidationError
+
+from config import CEFR_ORDER
+from schemas import ProcessRequest, ProcessResponse
+from services.flashcards import processFlashcardsText
+
+app = FastAPI(title="SnakeBrain NLP API")
+
 
 class SnakeRequest(BaseModel):
     langKnownCode: str
     langLearningCode: str
-    proficiencyLevel: str
+    proficiencyLevel: Optional[str] = None
     textBlock: str
+
 
 class SnakeResponse(BaseModel):
     wordKnown: str
     wordLearning: str
-    definitionKnown: str
-    definitionLearning: str
+    definitionKnown: Optional[str] = None
+    definitionLearning: Optional[str] = None
 
-MOCK_DATA = [
-    SnakeResponse(
-        wordKnown="jabłko",
-        wordLearning="apple",
-        definitionKnown="Okrągły owoc rosnący na drzewie",
-        definitionLearning="A round fruit with red or green skin"
-    ),
-    SnakeResponse(
-        wordKnown="kot",
-        wordLearning="cat",
-        definitionKnown="Małe zwierzę domowe",
-        definitionLearning="A small domesticated carnivorous mammal"
-    ),
-    SnakeResponse(
-        wordKnown="samochód",
-        wordLearning="car",
-        definitionKnown="Pojazd silnikowy na czterech kołach",
-        definitionLearning="A four-wheeled road vehicle"
-    ),
-    SnakeResponse(
-        wordKnown="rzeka",
-        wordLearning="river",
-        definitionKnown="Duży naturalny strumień wody",
-        definitionLearning="A large natural stream of water flowing in a channel"
-    ),
-    SnakeResponse(
-        wordKnown="drzewo",
-        wordLearning="tree",
-        definitionKnown="Wieloletnia roślina z drewnianym pniem",
-        definitionLearning="A woody perennial plant with a trunk"
-    )
-]
+
+def cleanLevel(level):
+    if level is None:
+        return None
+
+    cleaned = level.strip().upper()
+    if cleaned in CEFR_ORDER:
+        return cleaned
+    return None
+
+
+@app.get("/health")
+def healthCheck():
+    return {"status": "ok"}
+
 
 @app.post("/api/nlp/process", response_model=List[SnakeResponse])
-async def process_text_block(request: SnakeRequest):
-    result = MOCK_DATA.copy()
-    random.shuffle(result)
-    
-    count = random.randint(2, len(result))
-    return result[:count]
+def snakeProcessEndpoint(snakeRequest: SnakeRequest):
+    try:
+        request = ProcessRequest(
+            text=snakeRequest.textBlock,
+            learningLang=snakeRequest.langLearningCode.strip().lower(),
+            knownLang=snakeRequest.langKnownCode.strip().lower(),
+            proficiencyLevel=cleanLevel(snakeRequest.proficiencyLevel),
+        )
+    except ValidationError:
+        raise HTTPException(status_code=400, detail="Nieobsługiwany język albo zbyt długi tekst.")
 
-if __name__ == "__main__":
-    uvicorn.run("main:app", host="127.0.0.1", port=8081, reload=True)
+    response = processFlashcardsText(request)
+
+    result = []
+    for token in response.tokens:
+        result.append(SnakeResponse(
+            wordKnown=token.knownWord,
+            wordLearning=token.learningWord,
+            definitionKnown=token.knownDefinition,
+            definitionLearning=token.learningDefinition,
+        ))
+    return result
+
+
+@app.post("/process-text", response_model=ProcessResponse)
+def processTextEndpoint(request: ProcessRequest):
+    return processFlashcardsText(request)
