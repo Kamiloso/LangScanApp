@@ -14,8 +14,8 @@ public record SnakeResponse(
     public bool IsOk()
     {
         var (w1, w2, w3, w4) = this;
-        List<string> words = [w1, w2, w3, w4];
-        return words.All(s => s.Length <= Const.LEN_4096);
+        List<string?> words = [w1, w2, w3, w4];
+        return words.All(s => s == null || s.Length <= Const.LEN_4096);
     }
 
     public Phrase DerivePhrase(PhraseGroup phraseGroup)

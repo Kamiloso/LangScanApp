@@ -1,5 +1,5 @@
 ﻿namespace LangScan.Domain.Exceptions.Reasons;
 
-public class BrainIncorrectResponse() : AbortException(
+public class BrainIncorrectResponse(string msg = "???") : AbortException(
     status: HttpStatus.INTERNAL_SERVER_ERROR,
-    detail: "The AI brain responded with a tomato soup recipe");
+    detail: $"The AI brain responded with a tomato soup recipe: {msg}");

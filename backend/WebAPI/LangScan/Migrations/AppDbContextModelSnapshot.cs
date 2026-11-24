@@ -59,7 +59,7 @@ namespace LangScan.Migrations
                             Id = 1L,
                             Code = "pl",
                             KnownAllowed = true,
-                            LearningAllowed = false
+                            LearningAllowed = true
                         },
                         new
                         {
@@ -72,28 +72,28 @@ namespace LangScan.Migrations
                         {
                             Id = 3L,
                             Code = "es",
-                            KnownAllowed = false,
+                            KnownAllowed = true,
                             LearningAllowed = true
                         },
                         new
                         {
                             Id = 4L,
                             Code = "de",
-                            KnownAllowed = false,
+                            KnownAllowed = true,
                             LearningAllowed = true
                         },
                         new
                         {
                             Id = 5L,
                             Code = "fr",
-                            KnownAllowed = false,
+                            KnownAllowed = true,
                             LearningAllowed = true
                         },
                         new
                         {
                             Id = 6L,
                             Code = "it",
-                            KnownAllowed = false,
+                            KnownAllowed = true,
                             LearningAllowed = true
                         });
                 });

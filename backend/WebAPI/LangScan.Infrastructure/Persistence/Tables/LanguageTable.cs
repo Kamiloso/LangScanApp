@@ -24,12 +24,12 @@ internal class LanguageTable : IEntityTypeConfiguration<Language>
         // Data
 
         builder.HasData([
-            new() { Id = 1, Code = "pl", KnownAllowed = true, LearningAllowed = false },
+            new() { Id = 1, Code = "pl", KnownAllowed = true, LearningAllowed = true },
             new() { Id = 2, Code = "en", KnownAllowed = true, LearningAllowed = true },
-            new() { Id = 3, Code = "es", KnownAllowed = false, LearningAllowed = true },
-            new() { Id = 4, Code = "de", KnownAllowed = false, LearningAllowed = true },
-            new() { Id = 5, Code = "fr", KnownAllowed = false, LearningAllowed = true },
-            new() { Id = 6, Code = "it", KnownAllowed = false, LearningAllowed = true },
+            new() { Id = 3, Code = "es", KnownAllowed = true, LearningAllowed = true },
+            new() { Id = 4, Code = "de", KnownAllowed = true, LearningAllowed = true },
+            new() { Id = 5, Code = "fr", KnownAllowed = true, LearningAllowed = true },
+            new() { Id = 6, Code = "it", KnownAllowed = true, LearningAllowed = true },
         ]);
     }
 }

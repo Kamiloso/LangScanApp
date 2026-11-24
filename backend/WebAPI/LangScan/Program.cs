@@ -33,7 +33,7 @@ srv.AddHttpContextAccessor();
 {
     srv.AddScoped<IAppDbContext, AppDbContext>();
     srv.AddScoped<IAuthContext, AuthContext>();
-    srv.AddScoped<ISnakeBrain, SnakeBrain>();
+    srv.AddScoped<ISnakeBrain, LanguageModelPrompter>();
     srv.AddScoped<IRequestRetrySystem, RequestRetrySystem>();
     srv.AddScoped<IAuthContext, AuthContext>();
 
@@ -60,6 +60,7 @@ srv.AddHttpContextAccessor();
 // Domain
 {
     srv.AddSingleton<IRetrySystem, RetrySystem>();
+    srv.AddSingleton<IPromptSystem, PromptSystem>();
 }
 
 var app = builder.Build();

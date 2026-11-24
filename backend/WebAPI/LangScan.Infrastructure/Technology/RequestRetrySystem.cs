@@ -13,14 +13,14 @@ namespace LangScan.Infrastructure.Technology;
 internal class RequestRetrySystem(
     IRetrySystem retrySystem,
     IAppDbContext db,
-    AppConfig appConfig) : IRequestRetrySystem
+    AppConfig cfg) : IRequestRetrySystem
 {
     public async Task<T> RetryOnError<T>(Func<Task<T>> action)
     {
         action = WrapAction(action);
 
         return await retrySystem.RetryWithDelays(action, IsRetryableException,
-            maxRetries: appConfig.MaxRetryCount,
+            maxRetries: cfg.MaxRetryCount,
             min: 50,
             max: 250);
     }
