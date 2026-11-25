@@ -18,7 +18,6 @@ var builder = WebApplication.CreateBuilder(args);
 
 builder.LoadAppConfig();
 builder.SetupPostgres();
-builder.SetupSnakeBrainClient();
 builder.AddGoogleJwtAuthentication();
 
 var srv = builder.Services;
@@ -33,7 +32,7 @@ srv.AddHttpContextAccessor();
 {
     srv.AddScoped<IAppDbContext, AppDbContext>();
     srv.AddScoped<IAuthContext, AuthContext>();
-    srv.AddScoped<ISnakeBrain, LanguageModelPrompter>();
+    srv.AddScoped<IAiBrain, AiBrain>();
     srv.AddScoped<IRequestRetrySystem, RequestRetrySystem>();
     srv.AddScoped<IAuthContext, AuthContext>();
 

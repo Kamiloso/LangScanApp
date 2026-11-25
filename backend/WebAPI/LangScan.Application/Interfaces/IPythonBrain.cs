@@ -1,10 +1,10 @@
-﻿using LangScan.Domain.Model.Snake;
+﻿using LangScan.Domain.Model.Ai;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 
 namespace LangScan.Application.Interfaces;
 
-public interface ISnakeBrain
+public interface IAiBrain
 {
-    Task<IEnumerable<SnakeResponse>> ProcessTextBlock(SnakeRequest request);
+    Task<IEnumerable<AiResponse>> ProcessTextBlock(AiRequest request);
 }

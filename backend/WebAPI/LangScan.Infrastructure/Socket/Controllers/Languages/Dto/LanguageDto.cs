@@ -7,7 +7,4 @@ public record LanguageDto(
     long Id,
 
     [MaxLength(Const.LEN_255)]
-    string Code,
-    
-    bool KnownAllowed,
-    bool LearningAllowed);
+    string Code);

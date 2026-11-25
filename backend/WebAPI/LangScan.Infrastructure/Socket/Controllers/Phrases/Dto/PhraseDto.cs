@@ -7,14 +7,14 @@ public record PhraseDto(
     long Id,
     long IdPhraseGroup,
 
-    [MaxLength(Const.LEN_4096)]
+    [MaxLength(Const.LEN_4095)]
     string WordKnown,
 
-    [MaxLength(Const.LEN_4096)]
+    [MaxLength(Const.LEN_4095)]
     string WordLearning,
 
-    [MaxLength(Const.LEN_4096)]
+    [MaxLength(Const.LEN_4095)]
     string? DefinitionKnown,
 
-    [MaxLength(Const.LEN_4096)]
+    [MaxLength(Const.LEN_4095)]
     string? DefinitionLearning);

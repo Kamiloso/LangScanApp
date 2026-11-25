@@ -1,9 +1,7 @@
 ﻿using AutoInterfaceAttributes;
-using LangScan.Domain.Exceptions.Reasons;
-using LangScan.Domain.Model.Snake;
+using LangScan.Domain.Model.Ai;
 using System;
 using System.Collections.Generic;
-using System.Linq;
 using System.Text.Json;
 
 namespace LangScan.Domain.Systems;
@@ -17,7 +15,7 @@ public class PromptSystem : IPromptSystem
         AllowTrailingCommas = true
     };
 
-    public string BuildPrompt(SnakeRequest request)
+    public string BuildPrompt(AiRequest request)
     {
         string proficiencyInfo = request.ProficiencyLevel is null
             ? NoProficiencyInfoTemplate
@@ -32,23 +30,23 @@ public class PromptSystem : IPromptSystem
         static string Sanitize(string s) => s.Replace("`", "'");
     }
 
-    public IEnumerable<SnakeResponse> ExtractAnswer(string answer)
+    public IEnumerable<AiResponse> ExtractAnswer(string answer)
     {
         string cleanAnswer = CleanAnswer(answer);
 
         try
         {
-            var responses = JsonSerializer.Deserialize<IEnumerable<SnakeResponse>>(cleanAnswer, JsonOptions)
+            var responses = JsonSerializer.Deserialize<IEnumerable<AiResponse>>(cleanAnswer, JsonOptions)
                 ?? throw new JsonException("Cannot deserialize null");
 
-            if (!responses.All(r => r?.IsOk() == true))
-                throw new JsonException("Invalid format received");
+            if (!AiResponse.AreOk(responses))
+                throw new JsonException("Custom validation failed");
 
             return responses;
         }
-        catch (JsonException)
+        catch (JsonException ex)
         {
-            throw new BrainIncorrectResponse(answer);
+            throw new AiFailException(answer, ex);
         }
     }
 
@@ -94,6 +92,7 @@ public class PromptSystem : IPromptSystem
         `PROFICIENCY_INFO`
         Answer in a raw JSON format without any additional text or comments.
         If no useful items can be extracted, return an empty array.
+        Use dictionary forms (lemmatized) for standalone words. Keep letter case and punctuation consistent across all items.
         """;
 
     private const string ProficiencyInfoTemplate = """

@@ -7,7 +7,7 @@ using LangScan.Domain.Model.Composite;
 using LangScan.Domain.Model.Requests;
 using LangScan.Application.Extensions;
 using System.Linq;
-using LangScan.Domain.Model.Snake;
+using LangScan.Domain.Model.Ai;
 using System.Collections.Generic;
 
 namespace LangScan.Application.Services.Phrases;
@@ -15,11 +15,11 @@ namespace LangScan.Application.Services.Phrases;
 [AutoInterface]
 internal class PhraseHierarchyGenerateUseCase(
     IReqAuth reqAuth,
-    ISnakeBrain snakeBrain,
+    IAiBrain aiBrain,
     IPhraseHierarchyCrudService service,
     IAppDbContext db) : IPhraseHierarchyGenerateUseCase
 {
-    private IEnumerable<SnakeResponse>? _snakeResponses;
+    private IEnumerable<AiResponse>? _aiResponses;
 
     public async Task<PhraseHierarchy> Execute(PhraseHierarchyGenerate body)
     {
@@ -28,16 +28,10 @@ internal class PhraseHierarchyGenerateUseCase(
         var langKnown = await db.Languages
             .FindByIdOrDefaultAsync(body.IdLangKnown) ?? throw new LanguageNotFound();
 
-        if (!langKnown.KnownAllowed)
-            throw new LanguageCombinationNotSupported();
-
         var langLearning = await db.Languages
             .FindByIdOrDefaultAsync(body.IdLangLearning) ?? throw new LanguageNotFound();
 
-        if (!langLearning.LearningAllowed)
-            throw new LanguageCombinationNotSupported();
-
-        _snakeResponses ??= await snakeBrain.ProcessTextBlock(new SnakeRequest(
+        _aiResponses ??= await aiBrain.ProcessTextBlock(new AiRequest(
             langKnown.Code,
             langLearning.Code,
             body.ProficiencyLevel,
@@ -45,7 +39,7 @@ internal class PhraseHierarchyGenerateUseCase(
         ));
 
         var phraseGroup = body.DerivePhraseGroup(user);
-        var phrases = _snakeResponses
+        var phrases = _aiResponses
             .Select(r => r.DerivePhrase(phraseGroup));
 
         return await service.Post(new PhraseHierarchy

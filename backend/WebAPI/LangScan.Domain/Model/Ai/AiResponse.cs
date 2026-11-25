@@ -3,20 +3,21 @@ using LangScan.Domain.Model.Entities;
 using System.Collections.Generic;
 using System.Linq;
 
-namespace LangScan.Domain.Model.Snake;
+namespace LangScan.Domain.Model.Ai;
 
-public record SnakeResponse(
+public record AiResponse(
     string WordKnown,
     string WordLearning,
     string? DefinitionKnown,
     string? DefinitionLearning)
 {
-    public bool IsOk()
-    {
-        var (w1, w2, w3, w4) = this;
-        List<string?> words = [w1, w2, w3, w4];
-        return words.All(s => s == null || s.Length <= Const.LEN_4096);
-    }
+    public static bool AreOk(IEnumerable<AiResponse> enumerable)
+        => enumerable.All(r =>
+            r.WordKnown.Length <= Const.LEN_4095 &&
+            r.WordLearning.Length <= Const.LEN_4095 &&
+            (r.DefinitionKnown?.Length <= Const.LEN_4095) == true &&
+            (r.DefinitionLearning?.Length <= Const.LEN_4095) == true
+        );
 
     public Phrase DerivePhrase(PhraseGroup phraseGroup)
         => new()

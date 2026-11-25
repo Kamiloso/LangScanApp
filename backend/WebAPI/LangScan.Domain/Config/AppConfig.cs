@@ -4,6 +4,9 @@ namespace LangScan.Domain.Config;
 
 public record AppConfig(
     int MaxRetryCount,
+    int AiPromptTimeoutMs,
+    int AiPromptRetryCount,
+    int AiPromptDelayMs,
     IReadOnlyList<AiProviderConfig> AiProviders
 );
 

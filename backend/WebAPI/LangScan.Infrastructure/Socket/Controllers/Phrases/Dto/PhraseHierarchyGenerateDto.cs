@@ -17,5 +17,5 @@ public record PhraseHierarchyGenerateDto(
     [RegularExpression("^(A1|A2|B1|B2|C1|C2)$")]
     string? ProficiencyLevel,
 
-    [MaxLength(Const.LEN_1048575)]
+    [MaxLength(Const.LEN_65535)]
     string TextBlock);

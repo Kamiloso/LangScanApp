@@ -8,8 +8,4 @@ public record Language : ICrudEntity
 
     // Immutable
     public required string Code { get; init; }
-
-    // Mutable
-    public required bool LearningAllowed { get; set; }
-    public required bool KnownAllowed { get; set; }
 }

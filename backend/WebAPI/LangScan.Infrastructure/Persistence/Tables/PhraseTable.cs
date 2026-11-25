@@ -17,19 +17,19 @@ internal class PhraseTable : IEntityTypeConfiguration<Phrase>
             .IsRequired();
 
         builder.Property(p => p.WordKnown)
-            .HasMaxLength(Const.LEN_4096)
+            .HasMaxLength(Const.LEN_4095)
             .IsRequired();
 
         builder.Property(p => p.WordLearning)
-            .HasMaxLength(Const.LEN_4096)
+            .HasMaxLength(Const.LEN_4095)
             .IsRequired();
 
         builder.Property(p => p.DefinitionKnown)
-            .HasMaxLength(Const.LEN_4096)
+            .HasMaxLength(Const.LEN_4095)
             .IsRequired();
 
         builder.Property(p => p.DefinitionLearning)
-            .HasMaxLength(Const.LEN_4096)
+            .HasMaxLength(Const.LEN_4095)
             .IsRequired();
 
         // Relations

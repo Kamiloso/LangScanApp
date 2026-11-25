@@ -20,8 +20,6 @@ namespace LangScan.Migrations
                     Id = table.Column<long>(type: "bigint", nullable: false)
                         .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn),
                     Code = table.Column<string>(type: "character varying(255)", maxLength: 255, nullable: false),
-                    LearningAllowed = table.Column<bool>(type: "boolean", nullable: false),
-                    KnownAllowed = table.Column<bool>(type: "boolean", nullable: false),
                     xmin = table.Column<uint>(type: "xid", rowVersion: true, nullable: false)
                 },
                 constraints: table =>
@@ -89,10 +87,10 @@ namespace LangScan.Migrations
                     Id = table.Column<long>(type: "bigint", nullable: false)
                         .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn),
                     IdPhraseGroup = table.Column<long>(type: "bigint", nullable: false),
-                    WordKnown = table.Column<string>(type: "character varying(4096)", maxLength: 4096, nullable: false),
-                    WordLearning = table.Column<string>(type: "character varying(4096)", maxLength: 4096, nullable: false),
-                    DefinitionKnown = table.Column<string>(type: "character varying(4096)", maxLength: 4096, nullable: false),
-                    DefinitionLearning = table.Column<string>(type: "character varying(4096)", maxLength: 4096, nullable: false),
+                    WordKnown = table.Column<string>(type: "character varying(4095)", maxLength: 4095, nullable: false),
+                    WordLearning = table.Column<string>(type: "character varying(4095)", maxLength: 4095, nullable: false),
+                    DefinitionKnown = table.Column<string>(type: "character varying(4095)", maxLength: 4095, nullable: false),
+                    DefinitionLearning = table.Column<string>(type: "character varying(4095)", maxLength: 4095, nullable: false),
                     xmin = table.Column<uint>(type: "xid", rowVersion: true, nullable: false)
                 },
                 constraints: table =>
@@ -108,15 +106,15 @@ namespace LangScan.Migrations
 
             migrationBuilder.InsertData(
                 table: "languages",
-                columns: new[] { "Id", "Code", "KnownAllowed", "LearningAllowed" },
+                columns: new[] { "Id", "Code" },
                 values: new object[,]
                 {
-                    { 1L, "pl", true, false },
-                    { 2L, "en", true, true },
-                    { 3L, "es", false, true },
-                    { 4L, "de", false, true },
-                    { 5L, "fr", false, true },
-                    { 6L, "it", false, true }
+                    { 1L, "pl" },
+                    { 2L, "en" },
+                    { 3L, "es" },
+                    { 4L, "de" },
+                    { 5L, "fr" },
+                    { 6L, "it" }
                 });
 
             migrationBuilder.CreateIndex(

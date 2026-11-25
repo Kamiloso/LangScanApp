@@ -1,7 +1,7 @@
 ﻿
-namespace LangScan.Domain.Model.Snake;
+namespace LangScan.Domain.Model.Ai;
 
-public record SnakeRequest(
+public record AiRequest(
     string LangKnownCode,
     string LangLearningCode,
     string? ProficiencyLevel,

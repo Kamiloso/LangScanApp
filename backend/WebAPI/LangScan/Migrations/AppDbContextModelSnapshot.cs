@@ -34,12 +34,6 @@ namespace LangScan.Migrations
                         .HasMaxLength(255)
                         .HasColumnType("character varying(255)");
 
-                    b.Property<bool>("KnownAllowed")
-                        .HasColumnType("boolean");
-
-                    b.Property<bool>("LearningAllowed")
-                        .HasColumnType("boolean");
-
                     b.Property<uint>("Version")
                         .IsConcurrencyToken()
                         .ValueGeneratedOnAddOrUpdate()
@@ -57,44 +51,32 @@ namespace LangScan.Migrations
                         new
                         {
                             Id = 1L,
-                            Code = "pl",
-                            KnownAllowed = true,
-                            LearningAllowed = true
+                            Code = "pl"
                         },
                         new
                         {
                             Id = 2L,
-                            Code = "en",
-                            KnownAllowed = true,
-                            LearningAllowed = true
+                            Code = "en"
                         },
                         new
                         {
                             Id = 3L,
-                            Code = "es",
-                            KnownAllowed = true,
-                            LearningAllowed = true
+                            Code = "es"
                         },
                         new
                         {
                             Id = 4L,
-                            Code = "de",
-                            KnownAllowed = true,
-                            LearningAllowed = true
+                            Code = "de"
                         },
                         new
                         {
                             Id = 5L,
-                            Code = "fr",
-                            KnownAllowed = true,
-                            LearningAllowed = true
+                            Code = "fr"
                         },
                         new
                         {
                             Id = 6L,
-                            Code = "it",
-                            KnownAllowed = true,
-                            LearningAllowed = true
+                            Code = "it"
                         });
                 });
 
@@ -108,13 +90,13 @@ namespace LangScan.Migrations
 
                     b.Property<string>("DefinitionKnown")
                         .IsRequired()
-                        .HasMaxLength(4096)
-                        .HasColumnType("character varying(4096)");
+                        .HasMaxLength(4095)
+                        .HasColumnType("character varying(4095)");
 
                     b.Property<string>("DefinitionLearning")
                         .IsRequired()
-                        .HasMaxLength(4096)
-                        .HasColumnType("character varying(4096)");
+                        .HasMaxLength(4095)
+                        .HasColumnType("character varying(4095)");
 
                     b.Property<long>("IdPhraseGroup")
                         .HasColumnType("bigint");
@@ -127,13 +109,13 @@ namespace LangScan.Migrations
 
                     b.Property<string>("WordKnown")
                         .IsRequired()
-                        .HasMaxLength(4096)
-                        .HasColumnType("character varying(4096)");
+                        .HasMaxLength(4095)
+                        .HasColumnType("character varying(4095)");
 
                     b.Property<string>("WordLearning")
                         .IsRequired()
-                        .HasMaxLength(4096)
-                        .HasColumnType("character varying(4096)");
+                        .HasMaxLength(4095)
+                        .HasColumnType("character varying(4095)");
 
                     b.HasKey("Id");
 
@@ -170,7 +152,6 @@ namespace LangScan.Migrations
                         .HasColumnType("character varying(255)");
 
                     b.Property<string>("ProficiencyLevel")
-                        .IsRequired()
                         .HasMaxLength(255)
                         .HasColumnType("character varying(255)");
 

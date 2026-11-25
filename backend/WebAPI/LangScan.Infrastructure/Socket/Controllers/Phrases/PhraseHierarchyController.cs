@@ -57,7 +57,6 @@ public class PhraseHierarchyController(
     [SwaggerOperation(Summary = "Generate new phrase hierarchy")]
     [Returns<PhraseHierarchyDto>(HttpStatusCode.OK)]
     [Throws(HttpStatusCode.Unauthorized, "Missing or invalid authentication token.")]
-    [Throws(HttpStatusCode.Conflict, "Not supported language combination.")]
     [Throws(HttpStatusCode.NotFound, "Provided known or learning language ID does not exist.")]
     public async Task<ActionResult<PhraseHierarchyDto>> GeneratePhraseHierarchy(
         [FromBody] PhraseHierarchyGenerateDto bodyDto) => await Run(
