@@ -11,7 +11,7 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 namespace LangScan.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    [Migration("20261125004048_Initial")]
+    [Migration("20261127231722_Initial")]
     partial class Initial
     {
         /// <inheritdoc />
@@ -37,6 +37,10 @@ namespace LangScan.Migrations
                         .HasMaxLength(255)
                         .HasColumnType("character varying(255)");
 
+                    b.Property<string>("EnglishName")
+                        .IsRequired()
+                        .HasColumnType("text");
+
                     b.Property<uint>("Version")
                         .IsConcurrencyToken()
                         .ValueGeneratedOnAddOrUpdate()
@@ -54,32 +58,38 @@ namespace LangScan.Migrations
                         new
                         {
                             Id = 1L,
-                            Code = "pl"
+                            Code = "pl",
+                            EnglishName = "polish"
                         },
                         new
                         {
                             Id = 2L,
-                            Code = "en"
+                            Code = "en",
+                            EnglishName = "english"
                         },
                         new
                         {
                             Id = 3L,
-                            Code = "es"
+                            Code = "es",
+                            EnglishName = "spanish"
                         },
                         new
                         {
                             Id = 4L,
-                            Code = "de"
+                            Code = "de",
+                            EnglishName = "german"
                         },
                         new
                         {
                             Id = 5L,
-                            Code = "fr"
+                            Code = "fr",
+                            EnglishName = "french"
                         },
                         new
                         {
                             Id = 6L,
-                            Code = "it"
+                            Code = "it",
+                            EnglishName = "italian"
                         });
                 });
 
@@ -155,7 +165,6 @@ namespace LangScan.Migrations
                         .HasColumnType("character varying(255)");
 
                     b.Property<string>("ProficiencyLevel")
-                        .IsRequired()
                         .HasMaxLength(255)
                         .HasColumnType("character varying(255)");
 
@@ -184,18 +193,33 @@ namespace LangScan.Migrations
 
                     NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<long>("Id"));
 
-                    b.Property<string>("AnimalFood")
-                        .IsRequired()
-                        .HasMaxLength(65535)
-                        .HasColumnType("character varying(65535)");
+                    b.Property<long>("AnimalTimestamp")
+                        .HasColumnType("bigint");
 
-                    b.Property<int>("AnimalHealth")
-                        .HasColumnType("integer");
+                    b.Property<double>("Boredom")
+                        .HasColumnType("double precision");
 
                     b.Property<string>("Email")
                         .IsRequired()
                         .HasMaxLength(255)
                         .HasColumnType("character varying(255)");
+
+                    b.Property<string>("Food")
+                        .IsRequired()
+                        .HasMaxLength(65535)
+                        .HasColumnType("character varying(65535)");
+
+                    b.Property<double>("Hunger")
+                        .HasColumnType("double precision");
+
+                    b.Property<long>("Money")
+                        .HasColumnType("bigint");
+
+                    b.Property<long>("OwnerTimestamp")
+                        .HasColumnType("bigint");
+
+                    b.Property<double>("Thirst")
+                        .HasColumnType("double precision");
 
                     b.Property<uint>("Version")
                         .IsConcurrencyToken()

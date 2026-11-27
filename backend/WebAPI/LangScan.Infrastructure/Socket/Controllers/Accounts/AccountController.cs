@@ -36,10 +36,10 @@ public class AccountController(
     [Returns<AccountDto>(HttpStatusCode.OK)]
     [Throws(HttpStatusCode.Unauthorized, "Missing or invalid authentication token.")]
     public async Task<ActionResult<AccountDto>> PatchAnimalData(
-        [FromBody] AccountAnimalPatchDto bodyDto) => await Run(
+        [FromBody] AccountPatchDto bodyDto) => await Run(
         executor: async () =>
         {
-            UserAnimalPatch body = mapper.ToDomain(bodyDto);
+            UserPatch body = mapper.ToDomain(bodyDto);
             User result = await service.PatchAnimal(body);
             return mapper.ToDto(result);
         }

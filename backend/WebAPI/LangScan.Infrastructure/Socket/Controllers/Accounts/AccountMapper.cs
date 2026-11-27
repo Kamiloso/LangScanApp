@@ -9,5 +9,5 @@ namespace LangScan.Infrastructure.Socket.Controllers.Accounts;
 public partial class AccountMapper
 {
     public partial AccountDto ToDto(User domain);
-    public partial UserAnimalPatch ToDomain(AccountAnimalPatchDto dto);
+    public partial UserPatch ToDomain(AccountPatchDto dto);
 }

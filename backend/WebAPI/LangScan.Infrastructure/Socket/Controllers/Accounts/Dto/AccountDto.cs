@@ -5,13 +5,13 @@ namespace LangScan.Infrastructure.Socket.Controllers.Accounts.Dto;
 
 public record AccountDto(
     long Id,
+    [EmailAddress] [MaxLength(Const.LEN_255)] string Email,
 
-    [EmailAddress]
-    [MaxLength(Const.LEN_255)]
-    string Email,
+    long AnimalTimestamp,
+    [Range(double.MinValue, double.MaxValue)] double Thirst,
+    [Range(double.MinValue, double.MaxValue)] double Hunger,
+    [Range(double.MinValue, double.MaxValue)] double Boredom,
 
-    [Range(0, 100)]
-    int AnimalHealth,
-
-    [MaxLength(Const.LEN_65535)]
-    string AnimalFood);
+    long OwnerTimestamp,
+    long Money,
+    [MaxLength(Const.LEN_65535)] string Food);

@@ -22,13 +22,17 @@ internal class AiBrain(IPromptSystem promptSystem, AppConfig cfg) : IAiBrain
 
         string prompt = promptSystem.BuildPrompt(request);
 
-        foreach (var provider in cfg.AiProviders)
+        var orderedProviders = cfg.AiProviders.Values
+            .Where(p => p.IsValid())
+            .OrderBy(p => p.Priority);
+
+        foreach (var provider in orderedProviders)
         {
             var client = CreateClient(provider);
-            
-            for (int i = 0; i <= cfg.AiPromptRetryCount; i++)
+
+            for (int i = 0; i <= cfg.AiPromptTryCount; i++)
             {
-                bool isLast = i == cfg.AiPromptRetryCount;
+                bool isLast = i == cfg.AiPromptTryCount;
 
                 try
                 {
@@ -40,12 +44,12 @@ internal class AiBrain(IPromptSystem promptSystem, AppConfig cfg) : IAiBrain
                 catch (HttpRequestException ex)
                 {
                     exceptions.Add(ex);
-                    break; // network failure -> skip
+                    break;
                 }
                 catch (OperationCanceledException ex)
                 {
                     exceptions.Add(ex);
-                    break; // waiting for too long -> skip
+                    break;
                 }
                 catch (ClientResultException ex) when (ex.Status == 429 || ex.Status / 100 == 5)
                 {
@@ -56,22 +60,22 @@ internal class AiBrain(IPromptSystem promptSystem, AppConfig cfg) : IAiBrain
                         await Task.Delay(cfg.AiPromptDelayMs);
                     }
 
-                    continue; // transient error -> retry
+                    continue;
                 }
                 catch (ClientResultException ex)
                 {
                     exceptions.Add(ex);
-                    break; // any other http error -> skip
+                    break;
                 }
                 catch (AiFailException ex)
                 {
                     exceptions.Add(ex);
-                    continue; // AI 0 IQ problems -> retry
+                    continue;
                 }
                 catch (Exception ex)
                 {
                     exceptions.Add(ex);
-                    goto criticalLabel; // unknown -> crash
+                    goto criticalLabel;
                 }
             }
         }

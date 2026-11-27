@@ -20,6 +20,7 @@ namespace LangScan.Migrations
                     Id = table.Column<long>(type: "bigint", nullable: false)
                         .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn),
                     Code = table.Column<string>(type: "character varying(255)", maxLength: 255, nullable: false),
+                    EnglishName = table.Column<string>(type: "text", nullable: false),
                     xmin = table.Column<uint>(type: "xid", rowVersion: true, nullable: false)
                 },
                 constraints: table =>
@@ -34,8 +35,13 @@ namespace LangScan.Migrations
                     Id = table.Column<long>(type: "bigint", nullable: false)
                         .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn),
                     Email = table.Column<string>(type: "character varying(255)", maxLength: 255, nullable: false),
-                    AnimalHealth = table.Column<int>(type: "integer", nullable: false),
-                    AnimalFood = table.Column<string>(type: "character varying(65535)", maxLength: 65535, nullable: false),
+                    AnimalTimestamp = table.Column<long>(type: "bigint", nullable: false),
+                    Thirst = table.Column<double>(type: "double precision", nullable: false),
+                    Hunger = table.Column<double>(type: "double precision", nullable: false),
+                    Boredom = table.Column<double>(type: "double precision", nullable: false),
+                    OwnerTimestamp = table.Column<long>(type: "bigint", nullable: false),
+                    Money = table.Column<long>(type: "bigint", nullable: false),
+                    Food = table.Column<string>(type: "character varying(65535)", maxLength: 65535, nullable: false),
                     xmin = table.Column<uint>(type: "xid", rowVersion: true, nullable: false)
                 },
                 constraints: table =>
@@ -52,7 +58,7 @@ namespace LangScan.Migrations
                     IdUser = table.Column<long>(type: "bigint", nullable: false),
                     IdLanguageKnown = table.Column<long>(type: "bigint", nullable: false),
                     IdLanguageLearning = table.Column<long>(type: "bigint", nullable: false),
-                    ProficiencyLevel = table.Column<string>(type: "character varying(255)", maxLength: 255, nullable: false),
+                    ProficiencyLevel = table.Column<string>(type: "character varying(255)", maxLength: 255, nullable: true),
                     Name = table.Column<string>(type: "character varying(255)", maxLength: 255, nullable: false),
                     Description = table.Column<string>(type: "character varying(65535)", maxLength: 65535, nullable: false),
                     xmin = table.Column<uint>(type: "xid", rowVersion: true, nullable: false)
@@ -106,15 +112,15 @@ namespace LangScan.Migrations
 
             migrationBuilder.InsertData(
                 table: "languages",
-                columns: new[] { "Id", "Code" },
+                columns: new[] { "Id", "Code", "EnglishName" },
                 values: new object[,]
                 {
-                    { 1L, "pl" },
-                    { 2L, "en" },
-                    { 3L, "es" },
-                    { 4L, "de" },
-                    { 5L, "fr" },
-                    { 6L, "it" }
+                    { 1L, "pl", "polish" },
+                    { 2L, "en", "english" },
+                    { 3L, "es", "spanish" },
+                    { 4L, "de", "german" },
+                    { 5L, "fr", "french" },
+                    { 6L, "it", "italian" }
                 });
 
             migrationBuilder.CreateIndex(

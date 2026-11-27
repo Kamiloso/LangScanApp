@@ -17,10 +17,25 @@ internal class UserTable : IEntityTypeConfiguration<User>
             .HasMaxLength(Const.LEN_255)
             .IsRequired();
 
-        builder.Property(u => u.AnimalHealth)
+        builder.Property(u => u.AnimalTimestamp)
             .IsRequired();
 
-        builder.Property(u => u.AnimalFood)
+        builder.Property(u => u.Thirst)
+            .IsRequired();
+
+        builder.Property(u => u.Hunger)
+            .IsRequired();
+
+        builder.Property(u => u.Boredom)
+            .IsRequired();
+
+        builder.Property(u => u.OwnerTimestamp)
+            .IsRequired();
+
+        builder.Property(u => u.Money)
+            .IsRequired();
+
+        builder.Property(u => u.Food)
             .HasMaxLength(Const.LEN_65535)
             .IsRequired();
 

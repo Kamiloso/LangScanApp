@@ -11,7 +11,10 @@ public static class AppConfigConfig
     public static WebApplicationBuilder LoadAppConfig(this WebApplicationBuilder builder)
     {
         var appConfig = builder.Configuration.GetSection("AppConfig").Get<AppConfig>()
-            ?? throw new InvalidOperationException("AppConfig configuration section is missing or invalid");
+            ?? throw new InvalidOperationException("AppConfig cannot be loaded");
+
+        if (!appConfig.IsValid())
+            throw new InvalidOperationException("AppConfig is invalid");
 
         builder.Services.AddSingleton(appConfig);
 

@@ -15,11 +15,11 @@ public class UserService(
     public async Task<User> Get()
         => await reqAuth.Login();
 
-    public async Task<User> PatchAnimal(UserAnimalPatch body)
+    public async Task<User> PatchAnimal(UserPatch body)
     {
         var user = await reqAuth.Login();
 
-        user.ApplyAnimalPatch(body);
+        user.ApplyPatch(body);
 
         await db.SaveChangesAsync();
 

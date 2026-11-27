@@ -8,4 +8,5 @@ public record Language : ICrudEntity
 
     // Immutable
     public required string Code { get; init; }
+    public required string EnglishName { get; init; }
 }

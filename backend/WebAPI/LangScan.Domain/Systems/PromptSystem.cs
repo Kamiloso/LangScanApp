@@ -22,8 +22,8 @@ public class PromptSystem : IPromptSystem
             : ProficiencyInfoTemplate.Replace("`PROFICIENCY`", request.ProficiencyLevel);
 
         return MainPromptTemplate
-            .Replace("`LANG_KNOWN`", Sanitize(request.LangKnownCode))
-            .Replace("`LANG_LEARNING`", Sanitize(request.LangLearningCode))
+            .Replace("`LANG_KNOWN`", Sanitize(request.LangKnownEnglishName))
+            .Replace("`LANG_LEARNING`", Sanitize(request.LangLearningEnglishName))
             .Replace("`TEXT_BLOCK`", Sanitize(request.TextBlock))
             .Replace("`PROFICIENCY_INFO`", Sanitize(proficiencyInfo));
 
@@ -77,8 +77,8 @@ public class PromptSystem : IPromptSystem
         [
             {
                 "WordKnown": "Translation of WordLearning into `LANG_KNOWN`",
-                "WordLearning": "Extracted word or phrase in `LANG_LEARNING`",
                 "DefinitionKnown": "Definition of the phrase in `LANG_KNOWN`",
+                "WordLearning": "Extracted word or phrase in `LANG_LEARNING`",
                 "DefinitionLearning": "Definition of the phrase in `LANG_LEARNING`"
             },
             ...

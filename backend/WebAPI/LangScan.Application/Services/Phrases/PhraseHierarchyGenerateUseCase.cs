@@ -32,8 +32,8 @@ internal class PhraseHierarchyGenerateUseCase(
             .FindByIdOrDefaultAsync(body.IdLangLearning) ?? throw new LanguageNotFound();
 
         _aiResponses ??= await aiBrain.ProcessTextBlock(new AiRequest(
-            langKnown.Code,
-            langLearning.Code,
+            langKnown.EnglishName,
+            langLearning.EnglishName,
             body.ProficiencyLevel,
             body.TextBlock
         ));

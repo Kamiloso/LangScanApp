@@ -1,11 +1,14 @@
-﻿using System.ComponentModel.DataAnnotations;
-using LangScan.Domain.Config;
+﻿using LangScan.Domain.Config;
+using System.ComponentModel.DataAnnotations;
 
 namespace LangScan.Infrastructure.Socket.Controllers.Accounts.Dto;
 
-public record AccountAnimalPatchDto(
-    [Range(0, 100)]
-    int AnimalHealth,
+public record AccountPatchDto(
+    long AnimalTimestamp,
+    [Range(double.MinValue, double.MaxValue)] double Thirst,
+    [Range(double.MinValue, double.MaxValue)] double Hunger,
+    [Range(double.MinValue, double.MaxValue)] double Boredom,
 
-    [MaxLength(Const.LEN_65535)]
-    string AnimalFood);
+    long OwnerTimestamp,
+    long Money,
+    [MaxLength(Const.LEN_65535)] string Food);
