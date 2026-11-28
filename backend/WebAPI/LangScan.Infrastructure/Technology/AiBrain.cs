@@ -23,7 +23,7 @@ internal class AiBrain(IPromptSystem promptSystem, AppConfig cfg) : IAiBrain
         string prompt = promptSystem.BuildPrompt(request);
 
         var orderedProviders = cfg.AiProviders.Values
-            .Where(p => p.IsValid())
+            .Where(p => p.IsReady(out _))
             .OrderBy(p => p.Priority);
 
         foreach (var provider in orderedProviders)

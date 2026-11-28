@@ -1,5 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Linq;
 
 namespace LangScan.Domain.Config;
@@ -9,27 +8,37 @@ public record AppConfig(
     int AiPromptTimeoutMs,
     int AiPromptTryCount,
     int AiPromptDelayMs,
+    int MinValidAiProviders,
     IReadOnlyDictionary<string, AiProviderConfig> AiProviders)
 {
-    public bool IsValid() =>
-        MaxRetryCount >= 0 &&
-        AiPromptTimeoutMs > 0 &&
-        AiPromptTryCount >= 0 &&
-        AiPromptDelayMs >= 0 &&
-        AiProviders is not null &&
-        AiProviders.Keys.All(key => !string.IsNullOrWhiteSpace(key)) &&
-        AiProviders.Values.Any(value => value is not null && value.IsValid());
-}
+    public bool IsValid(out string error)
+    {
+        error = this switch
+        {
+            { MaxRetryCount: < 0 } => $"{nameof(MaxRetryCount)} must be greater than or equal to 0",
+            { AiPromptTimeoutMs: <= 0 } => $"{nameof(AiPromptTimeoutMs)} must be greater than 0",
+            { AiPromptTryCount: < 0 } => $"{nameof(AiPromptTryCount)} must be greater than or equal to 0",
+            { AiPromptDelayMs: < 0 } => $"{nameof(AiPromptDelayMs)} must be greater than or equal to 0",
+            { MinValidAiProviders: < 0 } => $"{nameof(MinValidAiProviders)} must be greater than or equal to 0",
+            { AiProviders: null } => $"{nameof(AiProviders)} is null",
+            _ when AiProviders.Keys.Any(string.IsNullOrWhiteSpace) => $"{nameof(AiProviders)} contains a null or empty key",
+            _ when AiProviders.Values.Any(value => value is null) => $"{nameof(AiProviders)} contains a null value",
+            _ => ValidateProviders()
+        };
 
-public record AiProviderConfig(
-    int Priority,
-    string Endpoint,
-    string ApiKey,
-    string Model)
-{
-    public bool IsValid() =>
-        !string.IsNullOrWhiteSpace(Endpoint) &&
-        Uri.TryCreate(Endpoint, UriKind.Absolute, out _) &&
-        !string.IsNullOrWhiteSpace(ApiKey) &&
-        !string.IsNullOrWhiteSpace(Model);
+        return error is "";
+    }
+
+    private string ValidateProviders()
+    {
+        var results = AiProviders
+            .Select(kvp => (kvp.Key, IsValid: kvp.Value.IsReady(out var err), Error: err))
+            .ToArray();
+
+        if (results.Count(x => x.IsValid) >= MinValidAiProviders)
+            return "";
+
+        var errors = results.Where(x => !x.IsValid).Select(x => $"[{x.Key}]: {x.Error}");
+        return $"Insufficient ready AI providers ({string.Join("; ", errors)})";
+    }
 }

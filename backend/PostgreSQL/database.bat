@@ -2,7 +2,7 @@
 setlocal
 
 set "CMD_START=docker compose up"
-set "CMD_STOP=docker compose stop"
+set "CMD_STOP=docker compose down"
 set "CMD_CONSOLE=docker compose exec db psql -U root"
 set "CMD_LOGS=docker compose logs -f"
 
@@ -14,6 +14,7 @@ echo.
 echo  1. Start container     ^| %CMD_START%
 echo  2. Stop container      ^| %CMD_STOP%
 echo  3. Open PSQL console   ^| %CMD_CONSOLE%
+echo  4. Open logs           ^| %CMD_LOGS%
 echo  0. Exit
 echo.
 echo  Select an option:
@@ -22,6 +23,7 @@ set /p "choice=>> "
 if "%choice%"=="1" goto start_container
 if "%choice%"=="2" goto stop_container
 if "%choice%"=="3" goto open_console
+if "%choice%"=="4" goto open_logs
 if "%choice%"=="0" goto end
 
 echo.
@@ -41,6 +43,11 @@ goto finish
 :open_console
 echo.
 %CMD_CONSOLE%
+goto finish
+
+:open_logs
+echo.
+%CMD_LOGS%
 goto finish
 
 :finish

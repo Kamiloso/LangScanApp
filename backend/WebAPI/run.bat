@@ -12,7 +12,7 @@ echo  --- APP RUNNER ---
 echo.
 echo  1. Run application
 echo  2. Run application (--run-it-tests)
-echo  3. Create .secrets template
+echo  3. Create secrets template
 echo  0. Exit
 echo.
 echo  Select an option:
@@ -41,7 +41,7 @@ goto finish
 echo.
 if not exist "%SECRETS_ENV%" (
 	for %%a in (GEMINI OPENAI GROK) do (
-		echo AppConfig__AiProviders__%%a__ApiKey=>>"%SECRETS_ENV%"
+		echo AI_KEY_%%a=>>"%SECRETS_ENV%"
 	)
 	echo Done!
 ) else (

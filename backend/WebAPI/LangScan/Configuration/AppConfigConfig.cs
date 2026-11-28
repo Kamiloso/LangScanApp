@@ -13,8 +13,8 @@ public static class AppConfigConfig
         var appConfig = builder.Configuration.GetSection("AppConfig").Get<AppConfig>()
             ?? throw new InvalidOperationException("AppConfig cannot be loaded");
 
-        if (!appConfig.IsValid())
-            throw new InvalidOperationException("AppConfig is invalid");
+        if (!appConfig.IsValid(out string error))
+            throw new InvalidOperationException($"AppConfig is invalid: {error}");
 
         builder.Services.AddSingleton(appConfig);
 

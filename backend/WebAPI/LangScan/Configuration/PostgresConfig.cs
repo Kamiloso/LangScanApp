@@ -11,7 +11,7 @@ public static class PostgresConfig
 {
     public static WebApplicationBuilder SetupPostgres(this WebApplicationBuilder builder)
     {
-        string? connectionString = builder.Configuration.GetConnectionString("Default");
+        string? connectionString = builder.Configuration.GetConnectionString("DefaultConnection");
 
         builder.Services.AddDbContext<AppDbContext>(options =>
             options.UseNpgsql(connectionString, b =>

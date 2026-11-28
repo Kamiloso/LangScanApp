@@ -1,4 +1,3 @@
-using DotNetEnv;
 using LangScan;
 using LangScan.Application.Interfaces;
 using LangScan.Application.Services.Languages;
@@ -14,15 +13,8 @@ using LangScan.Infrastructure.Socket.Controllers.Phrases;
 using LangScan.Infrastructure.Technology;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.Extensions.DependencyInjection;
-using System.IO;
-using System.Linq;
 
-if (!Env.TraversePath().Load(".secrets.env").Any())
-{
-    throw new FileNotFoundException(
-        $"File '.secrets/.env' could not be loaded. " +
-        $"Working directory: {Directory.GetCurrentDirectory()}");
-}
+AiSecrets.Load();
 
 var builder = WebApplication.CreateBuilder(args);
 
